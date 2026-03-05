@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: marie-harding-counselling-service
+    runtime: node
+    region: frankfurt
+    plan: free
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    autoDeploy: true
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: HOST
+        value: 0.0.0.0
+      - key: CONTACT_TO_EMAIL
+        value: marieharding4@gmail.com
+      - key: CONTACT_FROM_EMAIL
+        sync: false
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_SECURE
+        value: "false"
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: PUBLIC_ANALYTICS_ENABLED
+        value: "false"
+      - key: PUBLIC_ANALYTICS_DOMAIN
+        sync: false
+      - key: PUBLIC_ANALYTICS_SCRIPT_SRC
+        value: https://plausible.io/js/script.js

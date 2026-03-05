@@ -87,30 +87,69 @@ If analytics are enabled, the cookie banner appears. If analytics stay off, no b
 
 This project uses Astro with the Node adapter because the contact form is server-side.
 
-General deployment steps:
+### Render deployment
 
-1. Provision Node hosting that supports a long-running server process.
-2. Set the environment variables from `.env.example`.
-3. Run `npm ci`.
-4. Run `npm run build`.
-5. Start the server with `node ./dist/server/entry.mjs`.
+The repository now includes [`render.yaml`](./render.yaml) for a Render web service.
+
+Recommended setup:
+
+1. Sign in to [Render](https://render.com/).
+2. Create a new Blueprint or Web Service from the GitHub repo `JamesC1111/marie`.
+3. Let Render read the included `render.yaml`.
+4. Provide the prompted secret values:
+   - `CONTACT_FROM_EMAIL`
+   - `SMTP_HOST`
+   - `SMTP_USER`
+   - `SMTP_PASS`
+5. Deploy the service.
+
+Notes:
+
+- The blueprint currently uses `plan: free` so you can test without immediate paid hosting.
+- Before going live, change the service to a paid instance type in Render. Render’s free web services spin down after 15 minutes of inactivity, which can delay the next request and temporarily serve a restrictive `robots.txt` while the service is asleep.
+- The selected region is `frankfurt`, which is the closest listed Render region to Ireland.
+
+### Manual Node deployment
+
+If you host somewhere else that supports long-running Node services:
+
+1. Set the environment variables from `.env.example`.
+2. Run `npm ci`.
+3. Run `npm run build`.
+4. Start the server with `npm start`.
 
 ## Domain And `.ie` Notes
 
 - Choose one canonical domain and keep all other variants redirected to it.
-- If buying a `.ie` domain, decide whether the canonical host is the apex domain or `www`.
-- Point both the apex domain and `www` subdomain to the host, then redirect the non-canonical version permanently.
-- Keep the canonical URL in `src/lib/site.ts` and `astro.config.mjs` aligned with the chosen domain.
+- The codebase is already configured for `https://www.mariehardingcounselling.ie`.
+- Add `www.mariehardingcounselling.ie` as the custom domain in Render first.
+- Render will automatically add the root domain `mariehardingcounselling.ie` and redirect it to `www` when `www` is added first.
+- Point both the apex domain and `www` subdomain to Render using the values shown in the Render dashboard.
+- Keep the canonical URL in `src/lib/site.ts` and `astro.config.mjs` aligned with the chosen live domain.
 - Ensure HTTPS/SSL is active before launch.
+
+### DNS values for Render
+
+If your DNS provider is not Cloudflare-specific:
+
+- `www`:
+  - Type: `CNAME`
+  - Name/Host: `www`
+  - Value: your Render service subdomain, shown in Render, in the format `your-service.onrender.com`
+- Root domain:
+  - Type: `A`
+  - Name/Host: `@`
+  - Value: `216.24.57.1`
+
+Also remove any `AAAA` records for the root or `www` host while pointing the domain at Render.
 
 ## Launch Checklist
 
-- Buy and confirm the final domain.
-- Decide canonical host: apex or `www`.
-- Configure DNS records for the chosen host and redirect the non-canonical host.
+- Confirm `www.mariehardingcounselling.ie` is the canonical host.
+- Add the custom domain in Render before editing DNS.
+- Configure DNS records for the chosen host and verify the domain in Render.
 - Confirm SSL certificate is active.
 - Set SMTP environment variables and test the contact form.
-- Update canonical domain in `src/lib/site.ts`, `astro.config.mjs`, and `public/robots.txt` if needed.
 - Verify Google Search Console ownership.
 - Submit the sitemap URL.
 - Confirm phone, email, and address are correct on the live site.
