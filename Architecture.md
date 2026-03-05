@@ -1,11 +1,19 @@
 ﻿# Architecture
 
+## Status
+
+- Implemented on 5 March 2026.
+- Local checks in place: `format`, `lint`, `test`, `build`, `check:health`, `lighthouse`, `audit`.
+- GitHub Actions workflow runs weekly site-health reporting.
+
 ## Stack Choice
+
 - **Astro + TypeScript + Tailwind CSS**.
 - Static-first rendering with a lightweight server endpoint for the contact form.
 - Minimal client-side JavaScript; only small progressive enhancements where needed.
 
 ## High-Level Structure
+
 - `src/layouts/` shared page shell and metadata handling.
 - `src/components/` reusable UI components.
 - `src/pages/` route-based pages and API endpoints.
@@ -14,6 +22,7 @@
 - `public/` static assets (icons, OG image, robots).
 
 ## Routing Plan
+
 - `/` Home
 - `/about-marie`
 - `/how-counselling-works`
@@ -31,7 +40,9 @@
 ## Content Model
 
 ### Services collection (`src/content/services/*.md`)
+
 Frontmatter fields:
+
 - `title`
 - `summary`
 - `metaTitle`
@@ -40,6 +51,7 @@ Frontmatter fields:
 - `serviceArea` (optional)
 
 Body sections (authoring convention):
+
 - What this can feel like
 - How counselling may help
 - What we might work on together
@@ -47,7 +59,9 @@ Body sections (authoring convention):
 - Confidentiality note
 
 ### Resources collection (`src/content/resources/*.md`)
+
 Frontmatter fields:
+
 - `title`
 - `organisation`
 - `url`
@@ -57,7 +71,8 @@ Frontmatter fields:
 Body supports optional context and usage notes.
 
 ## Shared Components
-- `SiteLayout` for global chrome, metadata, schema, footer, and urgent-help note.
+
+- `Layout.astro` for global chrome, metadata, schema, footer, and urgent-help note.
 - `Hero` for landing headers and quick actions.
 - `PageHeader` for interior pages.
 - `Breadcrumbs` for navigational context.
@@ -67,6 +82,7 @@ Body supports optional context and usage notes.
 - `ContactBar` sticky mobile call/email actions.
 
 ## SEO and Metadata
+
 - Per-page title/description/canonical config.
 - Open Graph + Twitter card tags via layout props.
 - Shared OG image (simple text-based fallback image).
@@ -77,6 +93,7 @@ Body supports optional context and usage notes.
 - `robots.txt` served from `public/`.
 
 ## Accessibility Baseline
+
 - Semantic landmarks: header/nav/main/footer.
 - Skip link and keyboard focus visibility.
 - Colour contrast and readable line lengths.
@@ -84,6 +101,7 @@ Body supports optional context and usage notes.
 - Reduced motion and print-friendly defaults.
 
 ## Contact Form Architecture
+
 - `POST /api/contact` handles submissions.
 - Validation: required fields, max lengths, email format, consent check, and either email or phone.
 - Anti-spam:
@@ -93,7 +111,11 @@ Body supports optional context and usage notes.
 - No message persistence in databases.
 
 ## Operational and CI
+
 - npm scripts for lint, format, test, audit, lighthouse, and health checks.
+- Local health scripts live in `scripts/`.
+- Local Lighthouse scoring uses a direct Chrome launch wrapper for Windows reliability.
+- GitHub Actions runs Lighthouse CI on Ubuntu using `lighthouserc.cjs`.
 - Weekly GitHub Actions workflow:
   - Build
   - Link check
@@ -104,6 +126,7 @@ Body supports optional context and usage notes.
   - Issue creation on failure only
 
 ## Editing and Ownership
+
 - Most textual content editable via markdown collections/pages.
 - Contact details and organisation metadata centralised in config/constants to prevent drift.
 - Documentation includes non-technical update and deployment instructions.
