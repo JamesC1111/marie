@@ -1,4 +1,4 @@
-﻿# Plans
+# Plans
 
 ## Milestones
 
@@ -65,13 +65,26 @@
 - [x] Add deployment/domain/email launch checklist.
 - [x] Final content and quality pass.
 
+### 9. Launch hardening
+
+- [x] Add a dedicated `/healthz` endpoint for Render.
+- [x] Switch Render health checks to `/healthz`.
+- [x] Add host-aware `noindex` protection for non-canonical hosts.
+- [x] Serve restrictive `robots.txt` on non-production hosts.
+- [x] Keep canonical URLs pointed at `https://www.mariehardingcounselling.ie`.
+- [x] Add production-safe contact delivery validation and fallback UI.
+- [x] Tighten server-side contact validation without making the form harsher.
+- [x] Expand deployment and launch documentation for Render, DNS, SSL, and Blacknight.
+- [x] Re-run build, test, health checks, lint, and Lighthouse after hardening.
+
 ## Assumptions Log
 
-- [x] Canonical domain placeholder is `https://www.mariehardingcounselling.ie` until the final live domain is chosen.
+- [x] Canonical domain is `https://www.mariehardingcounselling.ie`.
 - [x] Exact fee amounts, online-session availability, and medical card acceptance remain intentionally unconfirmed.
 - [x] SMTP environment variables are the supported email delivery method.
+- [x] Only the live `www` host should be indexable; local, preview, and Render default hosts should remain blocked from indexing.
 
-## Final QA Checklist (pre-launch)
+## Final QA Checklist (repo and pre-launch)
 
 - [x] Mobile nav and sticky contact bar work across key pages.
 - [x] Keyboard-only navigation is usable; visible focus states throughout.
@@ -82,6 +95,9 @@
 - [x] No broken internal links.
 - [x] Meta title + description are unique on all indexable pages.
 - [x] Sitemap and robots are reachable.
-- [x] Lighthouse scores are strong for Home and Contact.
+- [x] `/healthz` returns a fast 200 response.
+- [x] Non-canonical hosts return `noindex` signals and restrictive robots rules.
+- [x] Contact form falls back safely when SMTP is unavailable in production.
+- [x] Lighthouse scores are strong for Home, Services, and Contact in local launch checks.
 - [x] Weekly CI health workflow runs and reports correctly.
 - [x] Documentation is clear for non-developers.

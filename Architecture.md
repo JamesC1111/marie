@@ -1,25 +1,28 @@
-﻿# Architecture
+# Architecture
 
 ## Status
 
 - Implemented on 5 March 2026.
 - Local checks in place: `format`, `lint`, `test`, `build`, `check:health`, `lighthouse`, `audit`.
-- GitHub Actions workflow runs weekly site-health reporting.
+- GitHub Actions runs weekly site-health reporting.
+- Launch hardening added for Render, custom-domain safety, and contact-form resilience.
 
 ## Stack Choice
 
 - **Astro + TypeScript + Tailwind CSS**.
-- Static-first rendering with a lightweight server endpoint for the contact form.
-- Minimal client-side JavaScript; only small progressive enhancements where needed.
+- Server output with the Node adapter.
+- Minimal client-side JavaScript; small progressive enhancements only where needed.
 
 ## High-Level Structure
 
 - `src/layouts/` shared page shell and metadata handling.
 - `src/components/` reusable UI components.
-- `src/pages/` route-based pages and API endpoints.
+- `src/pages/` route-based pages, dynamic support routes, and API endpoints.
 - `src/content/` markdown content collections for services and resources.
 - `src/styles/` global styles and print baseline.
-- `public/` static assets (icons, OG image, robots).
+- `src/lib/` shared configuration, schema, request, validation, and email helpers.
+- `public/` static assets such as icons, favicon, and OG image.
+- `scripts/` local health and Lighthouse checks.
 
 ## Routing Plan
 
@@ -35,7 +38,9 @@
 - `/terms-of-use`
 - `/accessibility-statement`
 - `/404`
-- `/api/contact` (POST endpoint)
+- `/robots.txt` dynamic host-aware robots route
+- `/healthz` lightweight health endpoint
+- `/api/contact` POST endpoint
 
 ## Content Model
 
@@ -72,30 +77,33 @@ Body supports optional context and usage notes.
 
 ## Shared Components
 
-- `Layout.astro` for global chrome, metadata, schema, footer, and urgent-help note.
+- `Layout.astro` for global chrome, metadata, canonical tags, and host-aware robots meta.
 - `Hero` for landing headers and quick actions.
 - `PageHeader` for interior pages.
 - `Breadcrumbs` for navigational context.
-- `ServiceCard` for service grid/listing.
-- `FAQAccordion` for practical FAQs (details/summary pattern).
+- `ServiceCard` for service grid and listing.
+- `FAQAccordion` for practical FAQs using `details/summary`.
 - `CTASection` for gentle contact prompts.
-- `ContactBar` sticky mobile call/email actions.
+- `ContactBar` sticky mobile call and email actions.
 
-## SEO and Metadata
+## SEO, Canonical, And Host Safety
 
-- Per-page title/description/canonical config.
-- Open Graph + Twitter card tags via layout props.
-- Shared OG image (simple text-based fallback image).
+- Per-page title, description, and canonical config.
+- Open Graph and Twitter card tags via layout props.
+- Shared OG image.
 - JSON-LD:
   - `WebSite` globally
-  - `LocalBusiness` on Home and Contact.
+  - `LocalBusiness` on Home and Contact
 - Sitemap generation via Astro integration.
-- `robots.txt` served from `public/`.
+- Dynamic `robots.txt`:
+  - canonical `www` host allows crawling and exposes sitemap
+  - non-canonical hosts disallow crawling
+- Middleware adds `X-Robots-Tag: noindex, nofollow` on non-canonical hosts.
 
 ## Accessibility Baseline
 
-- Semantic landmarks: header/nav/main/footer.
-- Skip link and keyboard focus visibility.
+- Semantic landmarks: header, nav, main, footer.
+- Skip link and visible keyboard focus states.
 - Colour contrast and readable line lengths.
 - Form labels, hints, and error feedback.
 - Reduced motion and print-friendly defaults.
@@ -103,30 +111,39 @@ Body supports optional context and usage notes.
 ## Contact Form Architecture
 
 - `POST /api/contact` handles submissions.
-- Validation: required fields, max lengths, email format, consent check, and either email or phone.
+- Validation:
+  - required fields
+  - max lengths
+  - email format
+  - basic phone validation
+  - preferred contact method must match supplied contact detail
+  - consent check
 - Anti-spam:
-  - Honeypot hidden field
-  - In-memory IP rate limiter (simple sliding window)
-- Email delivery abstraction in `src/lib/email.ts` using environment variables.
-- No message persistence in databases.
+  - honeypot hidden field
+  - in-memory IP rate limiter
+- Delivery:
+  - SMTP transport via environment variables
+  - no database storage
+  - local preview fallback for testing
+  - production-safe fallback UI if SMTP is unavailable
 
-## Operational and CI
+## Operational And CI
 
-- npm scripts for lint, format, test, audit, lighthouse, and health checks.
+- npm scripts for lint, format, test, audit, Lighthouse, and health checks.
 - Local health scripts live in `scripts/`.
-- Local Lighthouse scoring uses a direct Chrome launch wrapper for Windows reliability.
-- GitHub Actions runs Lighthouse CI on Ubuntu using `lighthouserc.cjs`.
+- `check:health` verifies links, schema, accessibility, `/healthz`, and non-production indexing behaviour.
+- Local Lighthouse checks run against the canonical `www` host name mapped to the local preview server.
 - Weekly GitHub Actions workflow:
-  - Build
-  - Link check
+  - build
+  - link check
   - Lighthouse CI
-  - Schema check
-  - Accessibility check
-  - Markdown report artifact
-  - Issue creation on failure only
+  - schema check
+  - accessibility check
+  - markdown report artifact
+  - issue creation on failure only
 
-## Editing and Ownership
+## Editing And Ownership
 
-- Most textual content editable via markdown collections/pages.
-- Contact details and organisation metadata centralised in config/constants to prevent drift.
-- Documentation includes non-technical update and deployment instructions.
+- Most textual content is editable via markdown collections and Astro page files.
+- Contact details and organisation metadata are centralised in shared config to prevent drift.
+- Deployment, DNS, SSL, and email handover steps live in `Documentation.md`.
