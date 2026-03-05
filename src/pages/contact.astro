@@ -1,13 +1,30 @@
-﻿---
+---
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import Icon from '../components/Icon.astro';
 import PageHeader from '../components/PageHeader.astro';
+import { getContactDeliveryConfig } from '../lib/contact-delivery';
+import { getRequestHost } from '../lib/request';
 import Layout from '../layouts/Layout.astro';
 import { localBusinessSchema } from '../lib/schema';
 import { practiceContact, serviceSignals } from '../lib/site';
 
 const status = Astro.url.searchParams.get('status');
 const error = Astro.url.searchParams.get('error');
+const requestHost = getRequestHost(Astro.request, Astro.url);
+const contactDelivery = getContactDeliveryConfig(requestHost);
+const formUnavailable = contactDelivery.mode === 'unavailable';
+const alertCopy =
+  status === 'success'
+    ? 'Thank you. Your message has been sent. Marie will respond as soon as possible.'
+    : error === 'validation'
+      ? 'Please check the form and try again. Include your contact details and a short message.'
+      : error === 'rate-limit'
+        ? 'There have been too many attempts in a short time. Please wait a little while, or contact Marie by phone or email.'
+        : error === 'service-unavailable'
+          ? 'The online form is temporarily unavailable. Please call or email Marie directly.'
+          : error
+            ? 'Sorry, your message could not be sent right now. Please try again or contact Marie by phone or email.'
+            : null;
 ---
 
 <Layout
@@ -24,18 +41,19 @@ const error = Astro.url.searchParams.get('error');
     />
   </div>
 
-  {(status === 'success' || error) && (
+  {alertCopy && (
     <section
+      id="contact-status"
       class={`mt-8 rounded-xl border px-4 py-3 text-sm ${
         status === 'success'
           ? 'border-emerald-300 bg-emerald-50 text-emerald-900'
           : 'border-amber-300 bg-amber-50 text-amber-900'
       }`}
-      aria-live="polite"
+      aria-live={status === 'success' ? 'polite' : 'assertive'}
+      role={status === 'success' ? 'status' : 'alert'}
+      tabindex="-1"
     >
-      {status === 'success'
-        ? 'Thank you. Your message has been sent. Marie will respond as soon as possible.'
-        : 'Sorry, your message could not be sent right now. Please try again or contact by phone/email.'}
+      {alertCopy}
     </section>
   )}
 
@@ -84,67 +102,80 @@ const error = Astro.url.searchParams.get('error');
 
     <section id="appointment-form" class="card">
       <h2 class="text-2xl font-semibold tracking-tight text-slate-900">Request an appointment</h2>
-      <p class="mt-3 text-slate-700">Please do not include highly sensitive details in this form.</p>
-      <p class="mt-1 text-sm text-slate-600">Messages are sent to email and are not stored on this website.</p>
-
-      <form action="/api/contact" method="post" class="form-grid mt-6" novalidate>
-        <div>
-          <label for="name">Name</label>
-          <input id="name" name="name" type="text" autocomplete="name" required maxlength="80" />
-        </div>
-
-        <div class="grid gap-4 md:grid-cols-2">
-          <div>
-            <label for="email">Email</label>
-            <input id="email" name="email" type="email" autocomplete="email" maxlength="160" />
-          </div>
-          <div>
-            <label for="phone">Phone</label>
-            <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="40" />
+      {formUnavailable ? (
+        <div class="mt-6 space-y-4 rounded-2xl border border-amber-300 bg-amber-50 p-4 text-slate-800" role="alert">
+          <p class="font-medium text-amber-950">The online request form is temporarily unavailable.</p>
+          <p>If you would like to ask about availability, please call or email Marie directly.</p>
+          <div class="flex flex-wrap gap-3">
+            <a class="btn-primary" href={`tel:+353872503743`}>Call Marie</a>
+            <a class="btn-secondary" href={`mailto:${practiceContact.email}`}>Email Marie</a>
           </div>
         </div>
+      ) : (
+        <>
+          <p class="mt-3 text-slate-700">Please do not include highly sensitive details in this form.</p>
+          <p class="mt-1 text-sm text-slate-600">Messages are sent to email and are not stored on this website.</p>
 
-        <div class="grid gap-4 md:grid-cols-2">
-          <div>
-            <label for="preferredContact">Preferred contact method</label>
-            <select id="preferredContact" name="preferredContact" required>
-              <option value="">Select one</option>
-              <option value="Phone">Phone</option>
-              <option value="Email">Email</option>
-              <option value="Either">Either</option>
-            </select>
-          </div>
-          <div>
-            <label for="preferredTimes">Preferred times</label>
-            <input
-              id="preferredTimes"
-              name="preferredTimes"
-              type="text"
-              maxlength="120"
-              placeholder="Example: weekday evenings"
-            />
-          </div>
-        </div>
+          <form action="/api/contact" method="post" class="form-grid mt-6" novalidate>
+            <div>
+              <label for="name">Name</label>
+              <input id="name" name="name" type="text" autocomplete="name" required maxlength="80" />
+            </div>
 
-        <div>
-          <label for="message">Short message</label>
-          <textarea id="message" name="message" required maxlength="1200"></textarea>
-        </div>
+            <div class="grid gap-4 md:grid-cols-2">
+              <div>
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" autocomplete="email" maxlength="160" />
+              </div>
+              <div>
+                <label for="phone">Phone</label>
+                <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="40" />
+              </div>
+            </div>
 
-        <div style="position:absolute;left:-9999px;opacity:0;pointer-events:none;" aria-hidden="true">
-          <label for="company">Company</label>
-          <input id="company" name="company" tabindex="-1" autocomplete="off" />
-        </div>
+            <div class="grid gap-4 md:grid-cols-2">
+              <div>
+                <label for="preferredContact">Preferred contact method</label>
+                <select id="preferredContact" name="preferredContact" required>
+                  <option value="">Select one</option>
+                  <option value="Phone">Phone</option>
+                  <option value="Email">Email</option>
+                  <option value="Either">Either</option>
+                </select>
+              </div>
+              <div>
+                <label for="preferredTimes">Preferred times</label>
+                <input
+                  id="preferredTimes"
+                  name="preferredTimes"
+                  type="text"
+                  maxlength="120"
+                  placeholder="Example: weekday evenings"
+                />
+              </div>
+            </div>
 
-        <div class="rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
-          <label class="inline-flex items-start gap-2" for="consent">
-            <input id="consent" name="consent" type="checkbox" required class="mt-1 h-4 w-4" />
-            <span>I consent to being contacted by Marie Harding Counselling Service regarding this enquiry.</span>
-          </label>
-        </div>
+            <div>
+              <label for="message">Short message</label>
+              <textarea id="message" name="message" required maxlength="1200"></textarea>
+            </div>
 
-        <button class="btn-primary w-fit" type="submit">Send request</button>
-      </form>
+            <div style="position:absolute;left:-9999px;opacity:0;pointer-events:none;" aria-hidden="true">
+              <label for="company">Company</label>
+              <input id="company" name="company" tabindex="-1" autocomplete="off" />
+            </div>
+
+            <div class="rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
+              <label class="inline-flex items-start gap-2" for="consent">
+                <input id="consent" name="consent" type="checkbox" required class="mt-1 h-4 w-4" />
+                <span>I consent to being contacted by Marie Harding Counselling Service regarding this enquiry.</span>
+              </label>
+            </div>
+
+            <button class="btn-primary w-fit" type="submit">Send request</button>
+          </form>
+        </>
+      )}
     </section>
   </section>
 </Layout>

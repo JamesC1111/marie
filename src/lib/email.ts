@@ -1,5 +1,7 @@
-﻿import nodemailer from "nodemailer";
-import { practiceContact, siteConfig } from "./site";
+import nodemailer from "nodemailer";
+
+import type { SmtpDeliveryConfig } from "./contact-delivery";
+import { siteConfig } from "./site";
 
 export type ContactSubmission = {
   name: string;
@@ -10,43 +12,11 @@ export type ContactSubmission = {
   message: string;
 };
 
-function hasSmtpConfig() {
-  return Boolean(
-    process.env.SMTP_HOST &&
-    process.env.SMTP_PORT &&
-    process.env.SMTP_USER &&
-    process.env.SMTP_PASS,
-  );
-}
-
-export async function sendContactEmail(payload: ContactSubmission) {
-  if (!hasSmtpConfig()) {
-    if (import.meta.env.DEV) {
-      console.info(
-        "[contact] SMTP not configured. Submission preview:",
-        payload,
-      );
-      return;
-    }
-
-    throw new Error("Email service is not configured.");
-  }
-
-  const transport = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT),
-    secure:
-      process.env.SMTP_SECURE === "true" ||
-      Number(process.env.SMTP_PORT) === 465,
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-  });
-
-  const to = process.env.CONTACT_TO_EMAIL ?? practiceContact.email;
-  const from = process.env.CONTACT_FROM_EMAIL ?? process.env.SMTP_USER!;
-
+export async function sendContactEmail(
+  payload: ContactSubmission,
+  delivery: SmtpDeliveryConfig,
+) {
+  const transport = nodemailer.createTransport(delivery.transport);
   const lines = [
     `New website enquiry for ${siteConfig.name}`,
     "",
@@ -61,8 +31,8 @@ export async function sendContactEmail(payload: ContactSubmission) {
   ];
 
   await transport.sendMail({
-    to,
-    from,
+    to: delivery.to,
+    from: delivery.from,
     replyTo: payload.email || undefined,
     subject: `New enquiry: ${payload.name}`,
     text: lines.join("\n"),

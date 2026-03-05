@@ -6,6 +6,7 @@ import {
   getRoutes,
   runA11yCheck,
   runLinkCheck,
+  runOperationalCheck,
   runSchemaCheck,
   withPreviewServer,
 } from "./health-lib.mjs";
@@ -49,11 +50,12 @@ const results = await withPreviewServer(async (currentBaseUrl) => {
   const linkResult = await runLinkCheck(currentBaseUrl, routes);
   const schemaResult = await runSchemaCheck(currentBaseUrl);
   const a11yResult = await runA11yCheck(currentBaseUrl, routes);
+  const operationalResult = await runOperationalCheck(currentBaseUrl, routes);
 
   return {
     generatedAt: new Date().toISOString(),
     routes,
-    checks: [linkResult, schemaResult, a11yResult],
+    checks: [linkResult, schemaResult, a11yResult, operationalResult],
   };
 });
 

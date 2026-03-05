@@ -1,4 +1,4 @@
-﻿---
+---
 import '../styles/global.css';
 
 import AnalyticsConsent from '../components/AnalyticsConsent.astro';
@@ -6,6 +6,7 @@ import CTASection from '../components/CTASection.astro';
 import ContactBar from '../components/ContactBar.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import { getRequestHost, shouldNoIndexHost } from '../lib/request';
 import { defaultMeta, siteConfig } from '../lib/site';
 
 interface Props {
@@ -31,6 +32,8 @@ const {
 const canonicalUrl = new URL(canonicalPath, siteConfig.siteUrl).toString();
 const pageTitle = `${title} | ${siteConfig.name}`;
 const ogImageUrl = new URL(imagePath, siteConfig.siteUrl).toString();
+const requestHost = getRequestHost(Astro.request, Astro.url);
+const shouldNoIndex = noIndex || shouldNoIndexHost(requestHost);
 ---
 
 <!doctype html>
@@ -41,7 +44,7 @@ const ogImageUrl = new URL(imagePath, siteConfig.siteUrl).toString();
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
     <meta name="theme-color" content="#f8fafc" />
-    {noIndex && <meta name="robots" content="noindex, nofollow" />}
+    {shouldNoIndex && <meta name="robots" content="noindex, nofollow" />}
 
     <title>{pageTitle}</title>
     <link rel="canonical" href={canonicalUrl} />

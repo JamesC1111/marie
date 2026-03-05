@@ -50,12 +50,14 @@ export const ctaLinks = {
   request: "/contact#appointment-form",
 } as const;
 
+const analyticsEnv = import.meta.env ?? {};
+
 export const analyticsConfig = {
-  enabled: import.meta.env.PUBLIC_ANALYTICS_ENABLED === "true",
+  enabled: analyticsEnv.PUBLIC_ANALYTICS_ENABLED === "true",
   scriptSrc:
-    import.meta.env.PUBLIC_ANALYTICS_SCRIPT_SRC ??
+    analyticsEnv.PUBLIC_ANALYTICS_SCRIPT_SRC ??
     "https://plausible.io/js/script.js",
-  domain: import.meta.env.PUBLIC_ANALYTICS_DOMAIN ?? "",
+  domain: analyticsEnv.PUBLIC_ANALYTICS_DOMAIN ?? "",
 };
 
 export const defaultMeta = {

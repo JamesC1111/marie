@@ -6,7 +6,7 @@ import { setTimeout as delay } from "node:timers/promises";
 
 const ROOT = process.cwd();
 const HOST = "127.0.0.1";
-const PORT = 4321;
+const PORT = 4322;
 const INTERNAL_HOSTS = new Set([
   HOST,
   "localhost",
@@ -25,6 +25,7 @@ const STATIC_ROUTES = [
   "/terms-of-use",
   "/accessibility-statement",
 ];
+const CANONICAL_URL = "https://www.mariehardingcounselling.ie";
 
 export const baseUrl = `http://${HOST}:${PORT}`;
 
@@ -97,6 +98,7 @@ export async function fetchPage(route, customBaseUrl = baseUrl) {
     route: normalisePathname(`${url.pathname}${url.search}`),
     status: response.status,
     ok: response.ok,
+    headers: response.headers,
     body,
   };
 }
@@ -370,6 +372,94 @@ export async function runA11yCheck(customBaseUrl = baseUrl, routes) {
     name: "Accessibility check",
     passed: failures.length === 0,
     checkedPages: routesToCheck.length,
+    failures,
+  };
+}
+
+export async function runOperationalCheck(customBaseUrl = baseUrl, routes) {
+  const failures = [];
+  const routesToCheck = routes ?? (await getRoutes());
+  const sampleServiceRoute =
+    routesToCheck.find((route) => route.startsWith("/services/")) ??
+    "/services";
+
+  const health = await fetchPage("/healthz", customBaseUrl);
+  if (!health.ok) {
+    failures.push(`/healthz returned HTTP ${health.status}.`);
+  } else if (health.body.trim() !== "ok") {
+    failures.push("/healthz should return the plain text body 'ok'.");
+  }
+
+  const home = await fetchPage("/", customBaseUrl);
+  if (!home.ok) {
+    failures.push(`Home page returned HTTP ${home.status}.`);
+  } else {
+    if (
+      !/<meta[^>]+name="robots"[^>]+content="noindex, nofollow"/i.test(
+        home.body,
+      )
+    ) {
+      failures.push(
+        "Local preview should output a noindex robots meta tag on the home page.",
+      );
+    }
+
+    if (home.headers.get("x-robots-tag") !== "noindex, nofollow") {
+      failures.push(
+        "Local preview should send the X-Robots-Tag noindex header.",
+      );
+    }
+
+    if (
+      !new RegExp(
+        `<link[^>]+rel="canonical"[^>]+href="${escapeRegex(CANONICAL_URL)}/?"`,
+        "i",
+      ).test(home.body)
+    ) {
+      failures.push(
+        "Home page canonical URL should point to the live www domain.",
+      );
+    }
+  }
+
+  const sampleService = await fetchPage(sampleServiceRoute, customBaseUrl);
+  if (!sampleService.ok) {
+    failures.push(
+      `${sampleServiceRoute} returned HTTP ${sampleService.status}.`,
+    );
+  } else if (
+    sampleService.headers.get("x-robots-tag") !== "noindex, nofollow"
+  ) {
+    failures.push(
+      `${sampleServiceRoute} should send the X-Robots-Tag noindex header on local preview.`,
+    );
+  }
+
+  const robots = await fetchPage("/robots.txt", customBaseUrl);
+  if (!robots.ok) {
+    failures.push(`/robots.txt returned HTTP ${robots.status}.`);
+  } else {
+    if (!/User-agent:\s*\*/i.test(robots.body)) {
+      failures.push("/robots.txt is missing a User-agent rule.");
+    }
+
+    if (!/Disallow:\s*\/\s*$/im.test(robots.body)) {
+      failures.push(
+        "Local preview robots.txt should disallow all crawling on non-canonical hosts.",
+      );
+    }
+
+    if (/Sitemap:/i.test(robots.body)) {
+      failures.push(
+        "Local preview robots.txt should not advertise the production sitemap.",
+      );
+    }
+  }
+
+  return {
+    name: "Operational check",
+    passed: failures.length === 0,
+    checkedPages: 3,
     failures,
   };
 }

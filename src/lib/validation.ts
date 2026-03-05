@@ -1,4 +1,6 @@
-﻿import { z } from "zod";
+import { z } from "zod";
+
+const PHONE_PATTERN = /^[0-9+\s()/-]+$/;
 
 export const contactSchema = z
   .object({
@@ -18,6 +20,7 @@ export const contactSchema = z
   .superRefine((data, ctx) => {
     const hasEmail = Boolean(data.email);
     const hasPhone = Boolean(data.phone);
+    const phoneDigits = (data.phone ?? "").replace(/\D/g, "");
 
     if (!hasEmail && !hasPhone) {
       ctx.addIssue({
@@ -39,6 +42,34 @@ export const contactSchema = z
           path: ["email"],
         });
       }
+    }
+
+    if (hasPhone) {
+      if (!PHONE_PATTERN.test(data.phone ?? "") || phoneDigits.length < 7) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Please enter a valid phone number.",
+          path: ["phone"],
+        });
+      }
+    }
+
+    if (data.preferredContact === "Email" && !hasEmail) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          "Please add an email address if you would like to be contacted by email.",
+        path: ["email"],
+      });
+    }
+
+    if (data.preferredContact === "Phone" && !hasPhone) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          "Please add a phone number if you would like to be contacted by phone.",
+        path: ["phone"],
+      });
     }
   });
 
