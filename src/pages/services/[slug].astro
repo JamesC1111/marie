@@ -1,0 +1,50 @@
+﻿---
+import { getCollection, render } from 'astro:content';
+
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Layout from '../../layouts/Layout.astro';
+import { getEntrySlug } from '../../lib/content';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const services = await getCollection('services');
+
+  return services.map((service) => ({
+    params: { slug: getEntrySlug(service.id) },
+    props: { service }
+  }));
+}
+
+const { service } = Astro.props;
+const { Content } = await render(service);
+---
+
+<Layout
+  title={service.data.metaTitle}
+  description={service.data.metaDescription}
+  canonicalPath={`/services/${getEntrySlug(service.id)}`}
+>
+  <div class="space-y-6">
+    <Breadcrumbs
+      items={[
+        { label: 'Home', href: '/' },
+        { label: 'Services', href: '/services' },
+        { label: service.data.title }
+      ]}
+    />
+    <PageHeader title={service.data.title} intro={service.data.summary} />
+  </div>
+
+  <article class="prose-safe mt-8">
+    <Content />
+  </article>
+
+  <section class="mt-10 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <h2 class="text-xl font-semibold text-slate-900">Need urgent help?</h2>
+    <p class="mt-2 text-slate-700">
+      This practice is not an emergency service. If you need urgent help, call 112 or 999. Samaritans freephone 116 123.
+    </p>
+  </section>
+</Layout>

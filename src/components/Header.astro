@@ -1,0 +1,58 @@
+﻿---
+import { navLinks, practiceContact } from '../lib/site';
+
+const currentPath = Astro.url.pathname;
+
+function isCurrent(href: string) {
+  if (href === '/') {
+    return currentPath === href;
+  }
+
+  return currentPath === href || currentPath.startsWith(`${href}/`);
+}
+---
+
+<header class="site-header">
+  <div class="container py-4">
+    <div class="flex items-center justify-between gap-4">
+      <a class="brand" href="/">
+        <span class="brand__name">Marie Harding Counselling Service</span>
+        <span class="brand__place">Kanturk, Co. Cork</span>
+      </a>
+      <a class="hidden text-sm font-medium text-slate-700 hover:text-slate-900 md:inline" href={`tel:+353872503743`}>
+        {practiceContact.phoneDisplay}
+      </a>
+    </div>
+
+    <details class="mt-4 md:hidden">
+      <summary class="menu-toggle">Menu</summary>
+      <nav class="mobile-nav mt-3" aria-label="Primary">
+        <ul class="space-y-2">
+          {navLinks.map((item) => (
+            <li>
+              <a aria-current={isCurrent(item.href) ? 'page' : undefined} href={item.href}>
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </details>
+
+    <nav class="mt-4 hidden md:block" aria-label="Primary">
+      <ul class="flex flex-wrap gap-3">
+        {navLinks.map((item) => (
+          <li>
+            <a
+              aria-current={isCurrent(item.href) ? 'page' : undefined}
+              class="nav-link"
+              href={item.href}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>

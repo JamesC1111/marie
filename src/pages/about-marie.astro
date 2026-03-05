@@ -1,0 +1,65 @@
+﻿---
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Layout from '../layouts/Layout.astro';
+import { serviceSignals } from '../lib/site';
+---
+
+<Layout
+  title="About Marie Harding"
+  description="Read Marie Harding's background, counselling experience, and practice values in Kanturk, Co. Cork."
+  canonicalPath="/about-marie"
+>
+  <div class="space-y-6">
+    <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'About Marie' }]} />
+    <PageHeader
+      title="About Marie"
+      intro="I aim to provide a calm, respectful space where you can speak openly and feel heard."
+    />
+  </div>
+
+  <article class="prose-safe mt-8">
+    <h2>My story</h2>
+    <p>
+      In my adult life I benefited greatly from counselling due to personal circumstances including addiction and bereavement.
+      Because of that experience, I was encouraged to pursue a career in counselling.
+      I wanted to use what I had learned to help others, so I began studying and qualified as an accredited counsellor.
+    </p>
+    <p>
+      I opened the doors to my private clinic in 1995.
+      In 1999, I was offered an opportunity to work with the HSE.
+      I worked with the HSE until 2016 while continuing to run my private clinics part-time.
+    </p>
+    <p>
+      After retiring from the HSE, I dedicated my time fully to my professional counselling practice, which I opened in
+      July 2018 in Kanturk, Co. Cork.
+    </p>
+
+    <h2>How I work</h2>
+    <p>
+      My approach is practical, person-centred, and grounded in confidentiality.
+      Confidentiality is of the utmost importance to me when working with clients.
+    </p>
+    <p>
+      I support adults, teenagers, families, and professionals across a range of concerns, including addiction,
+      bereavement, anxiety, depression, relationships, confidence, workplace or school bullying, and trauma-informed support.
+    </p>
+    <p>
+      I also provide professional supervision and I am an accredited supervisor with the NAPCP.
+    </p>
+
+    <h2>A little about me outside work</h2>
+    <p>
+      In my spare time I enjoy nature trails, daily meditation, reading, travelling, and time with family and friends.
+      I am an avid sports fan and a proud supporter of Munster Rugby and Cork teams.
+    </p>
+
+    <h2>Practice details</h2>
+    <ul>
+      <li>Private practice since {serviceSignals.privatePracticeSince}</li>
+      <li>HSE experience from {serviceSignals.hseExperience}</li>
+      <li>Full-time practice in Kanturk since {serviceSignals.fullTimeKanturkSince}</li>
+      <li>{serviceSignals.supervision}</li>
+    </ul>
+  </article>
+</Layout>

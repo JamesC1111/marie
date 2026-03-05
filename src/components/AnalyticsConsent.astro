@@ -1,0 +1,53 @@
+﻿---
+import { analyticsConfig } from '../lib/site';
+
+const isEnabled = analyticsConfig.enabled && analyticsConfig.domain;
+---
+
+{
+  isEnabled && (
+    <>
+      <div id="cookie-banner" class="cookie-banner" hidden>
+        <p>
+          This site can use privacy-focused analytics to understand anonymous visits. You can accept or decline.
+        </p>
+        <div class="cookie-banner__actions">
+          <button type="button" class="btn-secondary" data-consent="decline">Decline</button>
+          <button type="button" class="btn-primary" data-consent="accept">Accept</button>
+        </div>
+      </div>
+
+      <script is:inline define:vars={{ src: analyticsConfig.scriptSrc, domain: analyticsConfig.domain }}>
+        const key = 'mhcs-analytics-consent';
+        const banner = document.getElementById('cookie-banner');
+
+        const loadAnalytics = () => {
+          if (document.querySelector('script[data-analytics="plausible"]')) return;
+          const script = document.createElement('script');
+          script.src = src;
+          script.defer = true;
+          script.dataset.domain = domain;
+          script.dataset.analytics = 'plausible';
+          document.head.appendChild(script);
+        };
+
+        const consent = localStorage.getItem(key);
+        if (consent === 'accept') {
+          loadAnalytics();
+        } else {
+          banner?.removeAttribute('hidden');
+        }
+
+        banner?.addEventListener('click', (event) => {
+          const target = event.target;
+          if (!(target instanceof HTMLButtonElement)) return;
+          const value = target.dataset.consent;
+          if (!value) return;
+          localStorage.setItem(key, value);
+          if (value === 'accept') loadAnalytics();
+          banner.setAttribute('hidden', 'true');
+        });
+      </script>
+    </>
+  )
+}

@@ -1,0 +1,48 @@
+﻿---
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Accessibility statement"
+  description="Accessibility statement for Marie Harding Counselling Service website."
+  canonicalPath="/accessibility-statement"
+>
+  <div class="space-y-6">
+    <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Accessibility statement' }]} />
+    <PageHeader
+      title="Accessibility statement"
+      intro="Marie Harding Counselling Service is committed to making this website usable for as many people as possible."
+    />
+  </div>
+
+  <article class="prose-safe mt-8">
+    <h2>Accessibility standards</h2>
+    <p>
+      This website aims to meet core WCAG 2.2 AA requirements, including semantic structure,
+      keyboard navigation, focus visibility, readable text, and high contrast.
+    </p>
+
+    <h2>Features in place</h2>
+    <ul>
+      <li>Skip link to main content.</li>
+      <li>Keyboard-focus styles on interactive elements.</li>
+      <li>Responsive mobile-first layout.</li>
+      <li>Labelled form fields and clear messaging.</li>
+      <li>Reduced motion support and print-friendly styles.</li>
+    </ul>
+
+    <h2>Known limitations</h2>
+    <p>
+      Some third-party embeds, such as map content, may have accessibility limitations outside this website's direct control.
+    </p>
+
+    <h2>Feedback and support</h2>
+    <p>
+      If you experience any accessibility issue, please make contact and details can be addressed as quickly as possible.
+    </p>
+
+    <p><strong>Last reviewed:</strong> 5 March 2026.</p>
+  </article>
+</Layout>

@@ -1,0 +1,18 @@
+﻿---
+import { ctaLinks } from '../lib/site';
+import Icon from './Icon.astro';
+---
+
+<div class="contact-bar" role="complementary" aria-label="Quick contact actions">
+  <a href={ctaLinks.call} class="contact-bar__link">
+    <Icon name="phone" class="h-4 w-4" />
+    Call
+  </a>
+  <a href={ctaLinks.email} class="contact-bar__link">
+    <Icon name="email" class="h-4 w-4" />
+    Email
+  </a>
+  <a href={ctaLinks.request} class="contact-bar__link">
+    Request
+  </a>
+</div>
