@@ -1,0 +1,68 @@
+---
+import { getCollection } from "astro:content";
+
+import ArticleCard from "../../../components/ArticleCard.astro";
+import Breadcrumbs from "../../../components/Breadcrumbs.astro";
+import PageHeader from "../../../components/PageHeader.astro";
+import Layout from "../../../layouts/Layout.astro";
+import {
+  formatArticleDate,
+  getReadingTime,
+  getTagSlug,
+  sortByPublishedDesc,
+} from "../../../lib/articles";
+import { getEntrySlug } from "../../../lib/content";
+
+const insights = sortByPublishedDesc(await getCollection("insights"));
+const tagSlug = Astro.params.tag ?? "";
+const entries = insights.filter((entry) =>
+  entry.data.tags.some((tag) => getTagSlug(tag) === tagSlug),
+);
+const label = entries[0]?.data.tags.find((tag) => getTagSlug(tag) === tagSlug) ?? "Tag";
+---
+
+<Layout
+  title={`${label} insights | Marie Harding`}
+  description={`Articles related to ${label.toLowerCase()} on the Marie Harding Counselling Service website.`}
+  canonicalPath={Astro.url.pathname}
+>
+  <div class="space-y-6">
+    <Breadcrumbs
+      items={[
+        { label: "Home", href: "/" },
+        { label: "Insights", href: "/insights" },
+        { label },
+      ]}
+    />
+    <PageHeader
+      title={`${label} insights`}
+      intro="Articles grouped by topic so it is easier to continue reading around one theme."
+    />
+  </div>
+
+  {entries.length > 0 ? (
+    <section class="article-grid mt-10">
+      {entries.map((entry) => (
+        <ArticleCard
+          title={entry.data.title}
+          summary={entry.data.summary}
+          href={`/insights/${getEntrySlug(entry.id)}`}
+          label={entry.data.category}
+          meta={`${formatArticleDate(entry.data.published)} - ${getReadingTime(entry.body)} min read`}
+        />
+      ))}
+    </section>
+  ) : (
+    <section class="card mt-8">
+      <h1 class="text-3xl font-semibold tracking-tight text-slate-900">
+        No articles found for this tag
+      </h1>
+      <p class="mt-4 text-slate-700">
+        You can browse the full insights page instead.
+      </p>
+      <div class="mt-6">
+        <a class="btn-primary" href="/insights">View insights</a>
+      </div>
+    </section>
+  )}
+</Layout>

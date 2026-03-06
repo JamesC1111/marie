@@ -11,7 +11,7 @@ export const GET: APIRoute = ({ request, url }) => {
         "User-agent: *",
         "Allow: /",
         "",
-        `Sitemap: ${siteConfig.siteUrl}/sitemap-index.xml`,
+        `Sitemap: ${siteConfig.siteUrl}/sitemap.xml`,
         "",
       ].join("\n");
 

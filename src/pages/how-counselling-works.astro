@@ -1,46 +1,18 @@
 ---
 import Breadcrumbs from '../components/Breadcrumbs.astro';
+import CallbackCapture from '../components/CallbackCapture.astro';
 import FAQAccordion from '../components/FAQAccordion.astro';
 import PageHeader from '../components/PageHeader.astro';
 import SupportPanel from '../components/SupportPanel.astro';
+import { practicalFaqs } from '../lib/faqs';
 import Layout from '../layouts/Layout.astro';
-
-const faqs = [
-  {
-    question: 'Do I need a referral?',
-    answer: 'No referral is required. You can contact Marie directly.'
-  },
-  {
-    question: 'How long is a session?',
-    answer: 'Sessions are usually around 50 minutes. If you need a different format, please ask.'
-  },
-  {
-    question: 'Do you offer online appointments?',
-    answer: 'In-person sessions are available in Kanturk, Co. Cork. If online appointments would suit you better, please ask when you get in touch.'
-  },
-  {
-    question: 'Is what I say confidential?',
-    answer: 'Confidentiality is taken very seriously. Any limits are explained clearly at the start so you know where you stand.'
-  },
-  {
-    question: 'Do you work with teenagers?',
-    answer: 'Support for children and young people is available. Please ask about age suitability and what kind of support may be most appropriate.'
-  },
-  {
-    question: 'What if I am nervous about the first session?',
-    answer: 'That is very common. You are not expected to explain everything at once. The first session is simply a starting point.'
-  },
-  {
-    question: 'How do I cancel or rearrange?',
-    answer: 'Please give as much notice as possible if you need to cancel or move an appointment. Full practical details are on the Fees and cancellations page.'
-  }
-];
 ---
 
 <Layout
   title="How Counselling Works | Marie Harding"
   description="A clear guide to starting counselling with Marie Harding in Kanturk, Co. Cork, including first sessions, confidentiality, online options, and practical details."
   canonicalPath="/how-counselling-works"
+  showPageCta={false}
 >
   <div class="space-y-6">
     <Breadcrumbs
@@ -162,14 +134,23 @@ const faqs = [
       <section class="soft-panel">
         <p class="section-kicker">Useful next steps</p>
         <div class="mt-4 flex flex-col gap-3 text-sm font-medium">
-          <a class="link-subtle" href="/contact">Request an appointment</a>
+          <a class="link-subtle" href="/contact" data-speculate="intent">Request an appointment</a>
           <a class="link-subtle" href="/fees-and-cancellations">Fees and cancellations</a>
           <a class="link-subtle" href="/about-marie">About Marie</a>
           <a class="link-subtle" href="/resources">Support resources</a>
+          <a class="link-subtle" href="/guides">Practical guides</a>
         </div>
       </section>
     </aside>
   </section>
+
+  <div class="mt-14">
+    <CallbackCapture
+      title="If a shorter callback request would feel easier, you can use that instead"
+      intro="Some people prefer to leave their contact details first and keep the rest for a phone call or first session."
+      returnPath="/how-counselling-works"
+    />
+  </div>
 
   <section class="section-shell mt-14 px-6 py-8 md:px-8 md:py-10">
     <div class="max-w-3xl">
@@ -177,7 +158,10 @@ const faqs = [
       <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-900 md:text-3xl">Practical questions, answered clearly</h2>
     </div>
     <div class="mt-8">
-      <FAQAccordion items={faqs} />
+      <FAQAccordion items={practicalFaqs} />
+    </div>
+    <div class="mt-6">
+      <a class="link-subtle" href="/faq">Read the full FAQ</a>
     </div>
   </section>
 

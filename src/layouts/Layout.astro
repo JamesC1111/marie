@@ -32,7 +32,9 @@ const {
 } = Astro.props;
 
 const canonicalUrl = new URL(canonicalPath, siteConfig.siteUrl).toString();
-const pageTitle = `${title} | ${siteConfig.name}`;
+const pageTitle = /marie harding/i.test(title)
+  ? title
+  : `${title} | ${siteConfig.name}`;
 const ogImageUrl = new URL(imagePath, siteConfig.siteUrl).toString();
 const requestHost = getRequestHost(Astro.request, Astro.url);
 const shouldNoIndex = noIndex || shouldNoIndexHost(requestHost);

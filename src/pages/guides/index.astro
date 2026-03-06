@@ -44,7 +44,7 @@ const featuredGuides = guides.filter((guide) => guide.data.featured).slice(0, 3)
             summary={guide.data.summary}
             href={`/guides/${getEntrySlug(guide.id)}`}
             label={guide.data.category}
-            meta={`${formatArticleDate(guide.data.published)} · ${getReadingTime(guide.body)} min read`}
+            meta={`${formatArticleDate(guide.data.published)} - ${getReadingTime(guide.body)} min read`}
           />
         ))}
       </div>
@@ -65,7 +65,7 @@ const featuredGuides = guides.filter((guide) => guide.data.featured).slice(0, 3)
           summary={guide.data.summary}
           href={`/guides/${getEntrySlug(guide.id)}`}
           label={guide.data.category}
-          meta={`${formatArticleDate(guide.data.published)} · ${getReadingTime(guide.body)} min read`}
+          meta={`${formatArticleDate(guide.data.published)} - ${getReadingTime(guide.body)} min read`}
         />
       ))}
     </div>

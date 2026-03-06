@@ -13,75 +13,73 @@ import {
 import { getEntrySlug } from "../../lib/content";
 import { articleSchema } from "../../lib/schema";
 
-const guides = await getCollection("guides");
 const insights = await getCollection("insights");
+const guides = await getCollection("guides");
 const currentSlug = Astro.params.slug ?? "";
-const guide = guides.find((entry) => getEntrySlug(entry.id) === currentSlug);
+const insight = insights.find((entry) => getEntrySlug(entry.id) === currentSlug);
 
-if (!guide) {
+if (!insight) {
   Astro.response.status = 404;
 }
 
-const renderedGuide = guide ? await render(guide) : null;
-const Content = renderedGuide?.Content;
-
-const relatedGuides = guide
-  ? getRelatedArticles(guides, guide.id, guide.data.tags)
+const renderedInsight = insight ? await render(insight) : null;
+const Content = renderedInsight?.Content;
+const relatedInsights = insight
+  ? getRelatedArticles(insights, insight.id, insight.data.tags)
   : [];
-const relatedInsights = guide
-  ? getRelatedArticles(insights, "", guide.data.tags).slice(0, 2)
+const relatedGuides = insight
+  ? getRelatedArticles(guides, "", insight.data.tags).slice(0, 2)
   : [];
 ---
 
 <Layout
-  title={guide?.data.metaTitle ?? "Guide not found"}
+  title={insight?.data.metaTitle ?? "Insight not found"}
   description={
-    guide?.data.metaDescription ??
-    "The guide you were looking for is not available."
+    insight?.data.metaDescription ??
+    "The insight you were looking for is not available."
   }
-  canonicalPath={guide ? `/guides/${getEntrySlug(guide.id)}` : Astro.url.pathname}
+  canonicalPath={insight ? `/insights/${getEntrySlug(insight.id)}` : Astro.url.pathname}
   schema={
-    guide
+    insight
       ? [
           articleSchema({
-            headline: guide.data.title,
-            description: guide.data.metaDescription,
+            type: "BlogPosting",
+            headline: insight.data.title,
+            description: insight.data.metaDescription,
             url: new URL(
-              `/guides/${getEntrySlug(guide.id)}`,
+              `/insights/${getEntrySlug(insight.id)}`,
               "https://www.mariehardingcounselling.ie",
             ).toString(),
-            published: guide.data.published,
-            updated: guide.data.updated,
-            keywords: guide.data.tags,
+            published: insight.data.published,
+            updated: insight.data.updated,
+            keywords: insight.data.tags,
           }),
         ]
       : []
   }
 >
-  {guide && Content ? (
+  {insight && Content ? (
     <>
       <div class="space-y-6">
         <Breadcrumbs
           items={[
             { label: "Home", href: "/" },
-            { label: "Guides", href: "/guides" },
-            { label: guide.data.title },
+            { label: "Insights", href: "/insights" },
+            { label: insight.data.title },
           ]}
         />
         <header class="page-header">
-          <p class="section-kicker">{guide.data.category}</p>
+          <p class="section-kicker">{insight.data.category}</p>
           <h1 class="mt-2 text-4xl font-semibold tracking-tight text-slate-950 md:text-5xl">
-            {guide.data.title}
+            {insight.data.title}
           </h1>
-          <p class="page-lead mt-4 text-lg">
-            {guide.data.summary}
-          </p>
+          <p class="page-lead mt-4 text-lg">{insight.data.summary}</p>
           <div class="article-meta mt-5">
-            <span>{formatArticleDate(guide.data.published)}</span>
-            <span>{getReadingTime(guide.body)} min read</span>
+            <span>{formatArticleDate(insight.data.published)}</span>
+            <span>{getReadingTime(insight.body)} min read</span>
           </div>
           <div class="mt-4">
-            <TagList tags={guide.data.tags} />
+            <TagList tags={insight.data.tags} />
           </div>
         </header>
       </div>
@@ -93,48 +91,24 @@ const relatedInsights = guide
 
         <aside class="article-sidebar space-y-4">
           <section class="soft-panel">
-            <p class="section-kicker">Continue reading</p>
+            <p class="section-kicker">Useful next steps</p>
             <div class="mt-4 flex flex-col gap-3 text-sm font-medium">
               <a class="link-subtle" href="/contact" data-speculate="intent">
                 Request appointment
               </a>
-              <a class="link-subtle" href="/how-counselling-works" data-speculate="intent">
-                How counselling works
-              </a>
-              <a class="link-subtle" href="/faq">Practical FAQs</a>
+              <a class="link-subtle" href="/guides">Read longer guides</a>
+              <a class="link-subtle" href="/resources">Support resources</a>
             </div>
           </section>
         </aside>
       </section>
-
-      {relatedGuides.length > 0 && (
-        <section class="mt-14">
-          <div class="max-w-3xl">
-            <p class="section-kicker">Related guides</p>
-            <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-900 md:text-3xl">
-              You may also want to read
-            </h2>
-          </div>
-          <div class="article-grid mt-8">
-            {relatedGuides.map((entry) => (
-              <ArticleCard
-                title={entry.data.title}
-                summary={entry.data.summary}
-                href={`/guides/${getEntrySlug(entry.id)}`}
-                label={entry.data.category}
-                meta={`${formatArticleDate(entry.data.published)} - ${getReadingTime(entry.body)} min read`}
-              />
-            ))}
-          </div>
-        </section>
-      )}
 
       {relatedInsights.length > 0 && (
         <section class="mt-14">
           <div class="max-w-3xl">
             <p class="section-kicker">Related insights</p>
             <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-900 md:text-3xl">
-              Shorter reading from the insights section
+              More articles on nearby themes
             </h2>
           </div>
           <div class="article-grid mt-8">
@@ -150,18 +124,40 @@ const relatedInsights = guide
           </div>
         </section>
       )}
+
+      {relatedGuides.length > 0 && (
+        <section class="mt-14">
+          <div class="max-w-3xl">
+            <p class="section-kicker">Related guides</p>
+            <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-900 md:text-3xl">
+              Longer reading if you want more detail
+            </h2>
+          </div>
+          <div class="article-grid mt-8">
+            {relatedGuides.map((entry) => (
+              <ArticleCard
+                title={entry.data.title}
+                summary={entry.data.summary}
+                href={`/guides/${getEntrySlug(entry.id)}`}
+                label={entry.data.category}
+                meta={`${formatArticleDate(entry.data.published)} - ${getReadingTime(entry.body)} min read`}
+              />
+            ))}
+          </div>
+        </section>
+      )}
     </>
   ) : (
     <section class="card mt-8">
       <h1 class="text-3xl font-semibold tracking-tight text-slate-900">
-        Guide not found
+        Insight not found
       </h1>
       <p class="mt-4 text-slate-700">
-        The guide you were looking for is not available. You can return to the
-        guides page or contact Marie directly.
+        The article you were looking for is not available. You can return to
+        the insights page or contact Marie directly.
       </p>
       <div class="mt-6 flex flex-wrap gap-3">
-        <a class="btn-primary" href="/guides">View guides</a>
+        <a class="btn-primary" href="/insights">View insights</a>
         <a class="btn-secondary" href="/contact">Contact Marie</a>
       </div>
     </section>

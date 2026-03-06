@@ -19,9 +19,14 @@ function isCurrent(href: string) {
         <span class="brand__name">Marie Harding Counselling Service</span>
         <span class="brand__place">Kanturk, Co. Cork</span>
       </a>
-      <a class="header-call hidden md:inline-flex" href={`tel:+353872503743`}>
-        Call {practiceContact.phoneDisplay}
-      </a>
+      <div class="header-actions hidden md:flex">
+        <a class="header-secondary" href="/contact" data-speculate="intent">
+          Request appointment
+        </a>
+        <a class="header-call" href={`tel:+353872503743`}>
+          Call {practiceContact.phoneDisplay}
+        </a>
+      </div>
     </div>
 
     <details class="mt-4 md:hidden">
@@ -36,6 +41,14 @@ function isCurrent(href: string) {
             </li>
           ))}
         </ul>
+        <div class="mt-3 grid gap-2">
+          <a class="mobile-nav__cta" href="/contact" data-speculate="intent">
+            Request appointment
+          </a>
+          <a class="mobile-nav__cta mobile-nav__cta--secondary" href={`tel:+353872503743`}>
+            Call {practiceContact.phoneDisplay}
+          </a>
+        </div>
       </nav>
     </details>
 

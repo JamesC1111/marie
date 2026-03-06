@@ -46,7 +46,7 @@ const allTags = [...new Set(insights.flatMap((entry) => entry.data.tags))].sort(
             summary={entry.data.summary}
             href={`/insights/${getEntrySlug(entry.id)}`}
             label={entry.data.category}
-            meta={`${formatArticleDate(entry.data.published)} · ${getReadingTime(entry.body)} min read`}
+            meta={`${formatArticleDate(entry.data.published)} - ${getReadingTime(entry.body)} min read`}
           />
         ))}
       </div>
@@ -61,13 +61,16 @@ const allTags = [...new Set(insights.flatMap((entry) => entry.data.tags))].sort(
           Tags and themes
         </h2>
       </div>
-      <ul class="tag-list">
-        {allTags.map((tag) => (
-          <li>
-            <a href={`/insights/tags/${getTagSlug(tag)}`}>{tag}</a>
-          </li>
-        ))}
-      </ul>
+      <div class="flex flex-wrap items-center gap-3">
+        <a class="btn-tertiary" href="/rss.xml">RSS feed</a>
+        <ul class="tag-list">
+          {allTags.map((tag) => (
+            <li>
+              <a href={`/insights/tags/${getTagSlug(tag)}`}>{tag}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   </section>
 
@@ -79,7 +82,7 @@ const allTags = [...new Set(insights.flatMap((entry) => entry.data.tags))].sort(
           summary={entry.data.summary}
           href={`/insights/${getEntrySlug(entry.id)}`}
           label={entry.data.category}
-          meta={`${formatArticleDate(entry.data.published)} · ${getReadingTime(entry.body)} min read`}
+          meta={`${formatArticleDate(entry.data.published)} - ${getReadingTime(entry.body)} min read`}
         />
       ))}
     </div>

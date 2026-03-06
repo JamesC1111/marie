@@ -1,5 +1,6 @@
 ---
 import Breadcrumbs from '../components/Breadcrumbs.astro';
+import CallbackCapture from '../components/CallbackCapture.astro';
 import Icon from '../components/Icon.astro';
 import PageHeader from '../components/PageHeader.astro';
 import SupportPanel from '../components/SupportPanel.astro';
@@ -29,10 +30,11 @@ const alertCopy =
 ---
 
 <Layout
-  title="Contact Marie Harding | Kanturk Counselling"
+  title="Contact Marie Harding"
   description="Call, email, or request an appointment with Marie Harding Counselling Service in Kanturk, Co. Cork."
   canonicalPath="/contact"
   schema={[localBusinessSchema()]}
+  showPageCta={false}
 >
   <div class="space-y-6">
     <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Contact' }]} />
@@ -60,7 +62,7 @@ const alertCopy =
 
   <section class="contact-layout mt-8 grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
     <aside class="space-y-4">
-      <div class="contact-method-grid">
+      <div class="contact-method-grid contact-method-grid--stacked">
         <article class="contact-method-card">
           <p class="section-kicker">Phone</p>
           <h2 class="mt-2 text-xl font-semibold text-slate-900">Call Marie</h2>
@@ -200,6 +202,14 @@ const alertCopy =
       )}
     </section>
   </section>
+
+  <div class="mt-14">
+    <CallbackCapture
+      title="If you would prefer, leave your phone or email and Marie can get back to you"
+      intro="You can use this shorter callback request if that feels easier than writing a full enquiry."
+      returnPath="/contact"
+    />
+  </div>
 
   <div class="mt-14">
     <SupportPanel intro="If you are looking for urgent help or a wider support option alongside counselling, these official services may be useful." />

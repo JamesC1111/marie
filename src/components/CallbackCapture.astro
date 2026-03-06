@@ -53,21 +53,21 @@ const newsletterReady = Boolean(featureFlags.newsletterFormAction);
         ? "If you sign up for updates, your details go directly to the newsletter provider configured for the site."
         : "Details from this form are sent to email for the purpose of getting back to you and are not stored in a website database."}
     </p>
-  </div>
 
-  {callbackAlert && (
-    <section
-      class={`mt-6 rounded-[1.25rem] border px-4 py-3 text-sm ${
-        callbackStatus === "success"
-          ? "border-emerald-300 bg-emerald-50 text-emerald-900"
-          : "border-amber-300 bg-amber-50 text-amber-900"
-      }`}
-      aria-live={callbackStatus === "success" ? "polite" : "assertive"}
-      role={callbackStatus === "success" ? "status" : "alert"}
-    >
-      {callbackAlert}
-    </section>
-  )}
+    {callbackAlert && (
+      <section
+        class={`mt-6 rounded-[1.25rem] border px-4 py-3 text-sm ${
+          callbackStatus === "success"
+            ? "border-emerald-300 bg-emerald-50 text-emerald-900"
+            : "border-amber-300 bg-amber-50 text-amber-900"
+        }`}
+        aria-live={callbackStatus === "success" ? "polite" : "assertive"}
+        role={callbackStatus === "success" ? "status" : "alert"}
+      >
+        {callbackAlert}
+      </section>
+    )}
+  </div>
 
   {isNewsletterMode ? (
     newsletterReady ? (

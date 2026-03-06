@@ -19,7 +19,15 @@ export const chatIntents: ChatIntent[] = [
   {
     id: "appointments",
     label: "Appointments",
-    keywords: ["appointment", "appointments", "availability", "book", "booking", "session", "sessions"],
+    keywords: [
+      "appointment",
+      "appointments",
+      "availability",
+      "book",
+      "booking",
+      "session",
+      "sessions",
+    ],
     response:
       "If you would like to ask about availability, you can call, email, or use the appointment form. A short message is enough to begin.",
     links: [
@@ -70,7 +78,9 @@ export const chatIntents: ChatIntent[] = [
     keywords: ["confidential", "confidentiality", "private", "privacy"],
     response:
       "Confidentiality is of the utmost importance to Marie when working with clients. Any legal or safety-related limits are explained clearly at the start.",
-    links: [{ label: "Confidentiality overview", href: "/how-counselling-works" }],
+    links: [
+      { label: "Confidentiality overview", href: "/how-counselling-works" },
+    ],
   },
   {
     id: "urgent-help",

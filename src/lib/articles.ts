@@ -1,6 +1,8 @@
 import type { CollectionEntry } from "astro:content";
 
-export type ContentArticle = CollectionEntry<"guides"> | CollectionEntry<"insights">;
+export type ContentArticle =
+  | CollectionEntry<"guides">
+  | CollectionEntry<"insights">;
 
 export function getTagSlug(tag: string) {
   return tag

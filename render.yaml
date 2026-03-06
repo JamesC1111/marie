@@ -33,3 +33,13 @@ services:
         sync: false
       - key: PUBLIC_ANALYTICS_SCRIPT_SRC
         value: https://plausible.io/js/script.js
+      - key: PUBLIC_CHAT_ASSISTANT_ENABLED
+        value: "true"
+      - key: PUBLIC_CAPTURE_MODE
+        value: callback
+      - key: PUBLIC_NEWSLETTER_FORM_ACTION
+        sync: false
+      - key: PUBLIC_NEWSLETTER_BUTTON_LABEL
+        value: Join updates
+      - key: PUBLIC_SPECULATION_RULES_ENABLED
+        value: "false"

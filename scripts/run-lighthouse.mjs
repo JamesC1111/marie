@@ -9,7 +9,7 @@ import lighthouse from "lighthouse";
 import { withPreviewServer } from "./health-lib.mjs";
 
 const chromePort = 9222;
-const routes = ["/", "/services", "/contact"];
+const routes = ["/", "/services", "/contact", "/guides", "/insights"];
 const previewHostname = "www.mariehardingcounselling.ie";
 const thresholds = {
   performance: 0.9,
