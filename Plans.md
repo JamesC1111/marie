@@ -18,7 +18,7 @@
 ### 3. Content model and reusable components
 
 - [x] Configure Astro content collections for `services` and `resources`.
-- [x] Build components: `Hero`, `CTASection`, `ServiceCard`, `FAQAccordion`, `ContactBar`, `Breadcrumbs`, `PageHeader`.
+- [x] Build components: `Hero`, `CTASection`, `ServiceCard`, `FAQAccordion`, `ContactBar`, `Breadcrumbs`, and `PageHeader`.
 - [x] Add SEO helpers and JSON-LD helpers.
 
 ### 4. Page implementation
@@ -26,14 +26,14 @@
 - [x] Home
 - [x] About Marie
 - [x] How counselling works
-- [x] Services hub + at least 10 individual service pages
+- [x] Services hub + individual service pages
 - [x] Fees and cancellations
 - [x] Resources
 - [x] Contact
 - [x] Privacy policy
 - [x] Terms of use
 - [x] Accessibility statement
-- [x] 404 page
+- [x] 404
 
 ### 5. Contact and safety systems
 
@@ -41,18 +41,18 @@
 - [x] Add honeypot spam check.
 - [x] Add simple IP rate limit.
 - [x] Implement email sender interface via environment variables.
-- [x] Add user-safe success/error handling.
+- [x] Add user-safe success and error handling.
 
 ### 6. SEO, discovery, and metadata
 
 - [x] Unique metadata for each page.
 - [x] Canonical URLs and tidy social previews.
 - [x] Add `robots.txt` and sitemap generation.
-- [x] Add `LocalBusiness` and `WebSite` JSON-LD.
+- [x] Add `LocalBusiness`, `WebSite`, `FAQPage`, and article JSON-LD.
 
 ### 7. CI and maintenance
 
-- [x] Add scripts for lint/format/test/audit/lighthouse and health checks.
+- [x] Add scripts for lint, format, test, audit, Lighthouse, and health checks.
 - [x] Add weekly GitHub Actions `site-health` workflow.
 - [x] Generate markdown health report artifact.
 - [x] Open issue automatically only on failure.
@@ -62,7 +62,7 @@
 - [x] Run local build and checks.
 - [x] Fix broken links and metadata issues.
 - [x] Update memory files with final state.
-- [x] Add deployment/domain/email launch checklist.
+- [x] Add deployment, domain, and email launch checklist.
 - [x] Final content and quality pass.
 
 ### 9. Launch hardening
@@ -87,6 +87,43 @@
 - [x] Expand handover documentation with support-link editing guidance and local trust footprint notes.
 - [x] Re-run install, build, test, lint, and health checks after the update.
 
+### 11. Mobile + Desktop Excellence Pass
+
+- [x] Rework the homepage hero for faster trust and clearer contact actions.
+- [x] Improve navigation for mobile and desktop with stronger top-level CTAs.
+- [x] Tighten spacing, max widths, card rhythm, and section pacing sitewide.
+- [x] Strengthen the How counselling works page for nervous first-time visitors.
+- [x] Refine services and contact layouts for stronger desktop balance and mobile scannability.
+- [x] Expand practical FAQs and make accordion interactions calm and accessible.
+- [x] Re-check responsive layouts at 375px, 768px, 1280px, and large desktop.
+
+### 12. Chat assistant + callback capture
+
+- [x] Add a limited practical website chat launcher with safety wording.
+- [x] Keep chat restricted to practical topics and urgent-help redirection only.
+- [x] Add callback capture sections on Home, Contact, and How counselling works.
+- [x] Support callback mode by default and newsletter mode behind configuration.
+- [x] Keep all callback and contact submissions email-only with no database storage.
+- [x] Document feature flags, privacy notes, and operator setup.
+
+### 13. 2026 Advanced Optimisation Pass
+
+- [x] Add progressive, feature-flagged Speculation Rules for high-intent internal links.
+- [x] Keep a zero-request system-font strategy to avoid font CLS and extra requests.
+- [x] Keep imagery light and avoid unnecessary image-processing complexity.
+- [x] Add stronger security headers for interactive surfaces.
+- [x] Evaluate Astro 6 beta and keep the production build on stable Astro 5.
+- [x] Keep Navigation API and Trusted Types as documented future options rather than fragile partial implementations.
+
+### 14. Premium design + content growth pass
+
+- [x] Add a dedicated FAQ page.
+- [x] Add guides content collection and hub with 8 evergreen guides.
+- [x] Add insights content collection and hub with 6 starter articles.
+- [x] Add tag pages, RSS feed, related reading blocks, and article schema.
+- [x] Strengthen internal linking between Home, FAQ, guides, insights, services, and Contact.
+- [x] Document a link-earning strategy based on useful content rather than backlink schemes.
+
 ## Assumptions Log
 
 - [x] Canonical domain is `https://www.mariehardingcounselling.ie`.
@@ -94,6 +131,10 @@
 - [x] SMTP environment variables are the supported email delivery method.
 - [x] Only the live `www` host should be indexable; local, preview, and Render default hosts should remain blocked from indexing.
 - [x] Official support resources should stay factual, external, and clearly separate from Marie's counselling service.
+- [x] The chat assistant must remain practical-only and must not act as therapy, diagnosis, or crisis support.
+- [x] Callback capture is the default conversion path; newsletter mode is optional and unconfigured by default.
+- [x] System fonts are intentional for this project because the best font optimisation here is avoiding a webfont request entirely.
+- [x] Astro 6 beta is not worth the production risk for this site yet.
 
 ## Final QA Checklist (repo and pre-launch)
 
@@ -102,14 +143,17 @@
 - [x] All forms are labelled and validation messages are clear.
 - [x] Urgent-help note appears sitewide in footer.
 - [x] Contact details are consistent on all pages.
-- [x] No placeholder lorem text remains.
+- [x] No placeholder text remains.
 - [x] No broken internal links.
-- [x] Meta title + description are unique on all indexable pages.
+- [x] Meta title and description are unique on all indexable pages.
 - [x] Sitemap and robots are reachable.
 - [x] `/healthz` returns a fast 200 response.
 - [x] Non-canonical hosts return `noindex` signals and restrictive robots rules.
-- [x] Contact form falls back safely when SMTP is unavailable in production.
-- [x] Lighthouse scores are strong for Home, Services, and Contact in local launch checks.
+- [x] Contact and callback forms fall back safely when SMTP is unavailable in production.
+- [x] FAQ, guides, insights, and resources pages are linked from relevant journeys.
+- [x] RSS feed and custom sitemap route build successfully.
+- [x] Lighthouse scores are strong for Home, Services, Contact, Guides, and Insights in local checks.
+- [x] Responsive layouts were manually inspected from rendered pages at mobile, tablet, desktop, and large desktop widths.
 - [x] Weekly CI health workflow runs and reports correctly.
 - [x] Documentation is clear for non-developers.
-- [x] Resources page lists official supports and local Cork context without clutter or keyword stuffing.
+- [x] Content growth features are useful, non-spammy, and easy to maintain.

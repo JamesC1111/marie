@@ -6,21 +6,36 @@ This repository contains the production-ready Astro website for **Marie Harding 
 
 It includes:
 
-- a calm, mobile-first front end
-- markdown-driven services and resources content
-- an official Irish and Cork-relevant support resources layer
-- a server-side contact form that sends to email and does not store enquiries in a database
-- host-aware indexing safety for Render preview/default hosts
+- a calm, mobile-first front end with strong desktop layouts
+- markdown-driven services, resources, guides, and insights content
+- a practical FAQ page, RSS feed, and custom sitemap route
+- a server-side contact form and callback form that send to email and do not store enquiries in a database
+- a limited practical chat assistant with clear safety boundaries
+- host-aware indexing safety for Render preview and default hosts
 - Render deployment support and launch documentation
 - weekly automated site-health checks in GitHub Actions
+
+## Short Handover Summary
+
+- Run locally with `npm install` then `npm run dev`.
+- Build for production with `npm run build` and start with `npm start` or `npm run preview`.
+- Edit counselling services in `src/content/services`.
+- Edit support links in `src/content/resources`.
+- Edit evergreen guides in `src/content/guides`.
+- Edit weekly articles in `src/content/insights`.
+- Edit shared FAQs in `src/lib/faqs.ts`.
+- Edit contact details, trust signals, and feature flags in `src/lib/site.ts`.
 
 ## What Was Built
 
 - Mobile-first counselling website with calm, accessible design.
-- Shared layout, reusable components, and content collections for easy editing.
-- Contact page with click-to-call, tap-to-email, map embed, and protected email form.
-- Support resources page with official Irish services, local Cork framing, and reusable urgent-help panels.
-- Legal pages, accessibility statement, sitemap, dynamic `robots.txt`, `404`, and OG image.
+- Shared layout, reusable components, and markdown collections for easier editing.
+- Contact page with click-to-call, tap-to-email, map embed, protected enquiry form, and short callback-capture form.
+- Support resources page with official Irish services, Cork framing, and reusable urgent-help panels.
+- FAQ page with practical first-session questions answered clearly.
+- Guides hub with evergreen, practical articles designed to stay useful over time.
+- Insights hub with shorter weekly-style articles, tags, and RSS feed.
+- Legal pages, accessibility statement, custom `sitemap.xml`, dynamic `robots.txt`, `404`, and OG image.
 - Optional privacy-respecting analytics, defaulted off.
 - Dedicated `/healthz` endpoint for Render health checks.
 - Host-aware `noindex` protection for non-canonical hosts.
@@ -51,7 +66,10 @@ Notes:
 - Main page copy lives in `src/pages`.
 - Service pages live in `src/content/services`.
 - Resource items live in `src/content/resources`.
-- Shared contact details and structured-data values live in `src/lib/site.ts`.
+- Evergreen guides live in `src/content/guides`.
+- Weekly-style insight posts live in `src/content/insights`.
+- Shared FAQs live in `src/lib/faqs.ts`.
+- Shared contact details, trust signals, and structured-data values live in `src/lib/site.ts`.
 
 When editing:
 
@@ -61,13 +79,23 @@ When editing:
 - Do not change crisis wording casually.
 - Do not change protected counselling copy without human review. See `AGENTS.md`.
 
-### Editing support links
+### Services
+
+Each service markdown file should keep the same broad structure and meaning:
+
+- What this can feel like
+- How counselling may help
+- What we might work on together
+- How to start
+- Confidentiality note
+
+### Support links
 
 The support resources layer is intentionally simple:
 
 - one markdown file per organisation in `src/content/resources`
 - grouping is controlled by the `groups` array in each file
-- contact and local-support quick links are centralised in `src/lib/site.ts`
+- urgent and local quick links are centralised in `src/lib/site.ts`
 
 When updating support entries:
 
@@ -77,9 +105,110 @@ When updating support entries:
 - do not add referral schemes, affiliate links, or unofficial directories
 - check phone numbers, text numbers, and emails against the official site before publishing
 
+### Guides and insights
+
+Use `guides` for evergreen pages that should keep earning traffic over time.
+
+Use `insights` for shorter weekly posts.
+
+Recommended publishing rhythm:
+
+- 1 insight per week if Marie or James can sustain it
+- 1 new evergreen guide only when there is something genuinely useful to add
+- update existing evergreen guides before creating thin new pages
+
+Recommended content themes:
+
+- first-session questions
+- confidentiality and practical expectations
+- anxiety and day-to-day stress
+- grief and bereavement
+- online vs in-person practicalities
+- local or national support information
+
+## Design System And Layout Notes
+
+The design system is intentionally restrained:
+
+- soft neutral background with calm teal accents
+- editorial serif headings with a system sans body font
+- rounded section shells and cards with subtle shadows
+- short readable line lengths on desktop
+- clear CTA hierarchy without pushy styling
+- strong mobile sticky contact bar
+- unobtrusive bottom-right chat launcher
+
+The site is tuned to feel spacious on desktop without becoming empty:
+
+- the main content width is capped
+- long prose uses a tighter measure
+- large card grids collapse cleanly on smaller screens
+- the contact page uses a specific sidebar override so desktop cards do not become too narrow
+
+## Chat Assistant And Callback Capture
+
+### Chat assistant behaviour
+
+The chat assistant is intentionally limited.
+
+It may help with:
+
+- appointments
+- contact options
+- location
+- online vs in-person sessions
+- first-session expectations
+- confidentiality basics
+- urgent-help guidance
+
+It must not provide:
+
+- counselling
+- diagnosis
+- treatment advice
+- crisis intervention
+- encouragement to share highly sensitive personal or medical details
+
+If urgent-risk language appears, the assistant stops normal chat and directs the user to urgent help.
+
+### Chat configuration
+
+Chat is enabled by default in the codebase and can be turned off with:
+
+- `PUBLIC_CHAT_ASSISTANT_ENABLED=false`
+
+The chat is local to the site. No provider key is required for the current implementation.
+
+If a third-party widget is ever considered later:
+
+- keep it lazy-loaded
+- keep it feature-flagged
+- review privacy, CSP, and performance impact first
+- do not let it become an AI therapy or crisis tool
+
+### Callback and newsletter capture modes
+
+The capture component supports two modes:
+
+- `callback` (default)
+- `newsletter` (optional)
+
+Relevant variables:
+
+- `PUBLIC_CAPTURE_MODE=callback`
+- `PUBLIC_NEWSLETTER_FORM_ACTION=`
+- `PUBLIC_NEWSLETTER_BUTTON_LABEL=Join updates`
+
+If `PUBLIC_CAPTURE_MODE=newsletter` is enabled, you must also set a valid external form action URL. Otherwise the page will show a configuration warning.
+
+Privacy note for counselling context:
+
+- callback details are sent to email for follow-up and are not stored in a website database
+- newsletter mode should only be enabled if consent wording is explicit and the provider is GDPR-appropriate
+
 ## Contact Form Email Setup
 
-The contact form sends messages by email and does not store message contents on the site.
+The contact and callback forms send messages by email and do not store message contents on the site.
 
 ### Required SMTP variables
 
@@ -98,7 +227,7 @@ The contact form sends messages by email and does not store message contents on 
 
 If `CONTACT_TO_EMAIL` is not set, the site falls back to `marieharding4@gmail.com`.
 
-Reference template: [`.env.example`](./.env.example)
+Reference template: [`.env.example`](C:\Users\james\OneDrive\Documents\Playground.env.example)
 
 ### Delivery behaviour
 
@@ -107,9 +236,101 @@ Reference template: [`.env.example`](./.env.example)
   - submissions are logged locally for testing
   - no email is sent
 - Non-local production host with missing or invalid SMTP:
-  - the contact page shows a stronger fallback note to call or email directly
-  - the API returns a safe error state
+  - the contact and callback sections show a stronger fallback note to call or email directly
+  - the APIs return a safe error state
   - internal configuration details are logged only for the operator
+
+## Feature Flags And Browser Support
+
+### Feature flags
+
+- `PUBLIC_CHAT_ASSISTANT_ENABLED`
+- `PUBLIC_CAPTURE_MODE`
+- `PUBLIC_NEWSLETTER_FORM_ACTION`
+- `PUBLIC_NEWSLETTER_BUTTON_LABEL`
+- `PUBLIC_SPECULATION_RULES_ENABLED`
+- `PUBLIC_ANALYTICS_ENABLED`
+- `PUBLIC_ANALYTICS_DOMAIN`
+- `PUBLIC_ANALYTICS_SCRIPT_SRC`
+
+### Speculation Rules
+
+Speculation Rules are optional and off by default.
+
+To enable them on the live site:
+
+- set `PUBLIC_SPECULATION_RULES_ENABLED=true`
+
+Current behaviour:
+
+- only renders on the canonical production host
+- only targets links marked `data-speculate="intent"`
+- no effect in browsers that do not support the API
+- no effect on non-production hosts
+
+This keeps prefetching narrow and safe.
+
+### Motion and transitions
+
+The site uses only small progressive enhancements:
+
+- CSS view transitions where supported
+- no heavy page animation
+- reduced-motion preferences disable transitions and animations
+
+## Advanced Optimisation Notes
+
+### Adopted
+
+- System font strategy for zero extra font requests.
+- Feature-flagged Speculation Rules for high-intent internal links.
+- Lightweight security headers in middleware.
+- Custom `sitemap.xml` route aligned with current content collections.
+- RSS feed for the insights section.
+- Minimal image usage with a light OG asset rather than decorative media.
+
+### Evaluated but not adopted
+
+#### Astro 6 beta
+
+Current installed Astro line is stable Astro 5.
+
+Decision:
+
+- do not upgrade yet
+
+Reason:
+
+- no strong business or performance win for this calm, content-led site
+- current build is already fast and stable
+- beta risk is not justified for a small local practice site
+
+Suggested future review point:
+
+- review Astro 6 again after stable release notes clearly show a practical win for this project
+
+#### Navigation API
+
+Decision:
+
+- not implemented
+
+Reason:
+
+- this is a mostly server-rendered content site
+- there is no strong UX gain compared with the added maintenance complexity
+
+#### Trusted Types and stricter CSP
+
+Decision:
+
+- documented as future work, not implemented yet
+
+Reason:
+
+- current interactive surface area is still small
+- adding a strict policy now risks breaking safe inline enhancements without clear practical benefit
+- revisit if third-party scripts or richer client-side features are added
 
 ## Analytics
 
@@ -130,6 +351,7 @@ If analytics are enabled, the cookie banner appears. If analytics stay off, no b
 - `npm run test`
 - `npm run audit`
 - `npm run build`
+- `npm run check:links`
 - `npm run check:health`
 - `npm run lighthouse`
 
@@ -141,11 +363,11 @@ Notes:
 
 ## Deployment
 
-This project uses Astro with the Node adapter because the contact form is server-side.
+This project uses Astro with the Node adapter because the contact and callback forms are server-side.
 
 ### Render deployment
 
-The repository includes [`render.yaml`](./render.yaml) for a Render web service.
+The repository includes [render.yaml](C:\Users\james\OneDrive\Documents\Playground\render.yaml) for a Render web service.
 
 Recommended setup:
 
@@ -199,7 +421,7 @@ This covers:
 
 Important:
 
-- Root domain redirect (`mariehardingcounselling.ie` -> `www.mariehardingcounselling.ie`) still depends on the Render custom-domain setup and DNS being correct.
+- root domain redirect (`mariehardingcounselling.ie` -> `www.mariehardingcounselling.ie`) still depends on the Render custom-domain setup and DNS being correct
 
 ## Domain And `.ie` Notes
 
@@ -252,8 +474,8 @@ The domain is managed in Blacknight.
 
 Before changing anything:
 
-- Keep Blacknight nameservers in place unless you are intentionally moving DNS elsewhere.
-- Edit only the DNS records needed for Render.
+- keep Blacknight nameservers in place unless you are intentionally moving DNS elsewhere
+- edit only the DNS records needed for Render
 
 Checklist:
 
@@ -277,11 +499,14 @@ Checklist:
 - [ ] Confirm the Render default hostname is `noindex`.
 - [ ] Confirm `robots.txt` is correct on the live production host.
 
-### Contact form and email
+### Contact, callback, and chat
 
 - [ ] Confirm SMTP works in production.
 - [ ] Confirm a real contact form submission is received in the inbox.
-- [ ] Confirm the fallback direct call/email contact details are still correct.
+- [ ] Confirm a real callback form submission is received in the inbox.
+- [ ] Confirm the chat assistant loads and only answers practical questions.
+- [ ] Confirm urgent-risk wording in chat points to the support resources page and emergency contacts.
+- [ ] Confirm fallback direct call and email details are still correct.
 
 ### Search and listings
 
@@ -294,8 +519,9 @@ Checklist:
 ### Final live checks
 
 - [ ] Confirm phone, email, and address match across the live site.
-- [ ] Confirm the homepage, services, and contact page all load correctly on mobile.
+- [ ] Confirm the homepage, services, guides, and contact page all load correctly on mobile.
 - [ ] Confirm the contact bar works on a phone.
+- [ ] Confirm the callback capture section behaves correctly on Home and Contact.
 - [ ] Confirm the site loads over HTTPS without certificate warnings.
 
 ## Support Resources Maintenance
@@ -354,6 +580,36 @@ Guidelines:
 - keep service descriptions calm and factual
 - do not use backlink schemes, directory spam, bought listings, or link exchanges
 
+## Content Growth And Link-Earning Strategy
+
+The site should earn links by being genuinely useful, not by chasing links artificially.
+
+### Current link-earning assets
+
+- evergreen practical guides
+- a curated support resources page
+- a practical FAQ page
+- short insights articles that can be published weekly
+- clean share metadata and article templates
+- good internal linking between articles, services, and contact actions
+
+### Recommended weekly workflow
+
+1. Choose one practical topic that real visitors are likely to ask about.
+2. Decide whether it is an evergreen guide or a shorter insight.
+3. Write or edit the markdown file.
+4. Link it to one relevant service page and one next-step page such as Contact or How counselling works.
+5. Run `npm run build` and `npm run check:health`.
+6. Publish only if the piece is genuinely useful and not padded for SEO.
+
+### Do not do this
+
+- do not buy backlinks
+- do not use directory spam
+- do not create doorway pages
+- do not stuff location names into titles or body copy
+- do not create thin weekly posts just to hit a number
+
 ## Domain Approval Note
 
 Domain approval does not block content, design, or support-resource work.
@@ -364,7 +620,7 @@ Once the domain is approved, the final live checks are:
 - SSL
 - canonical host verification
 - Search Console setup
-- live contact-form test
+- live contact and callback form tests
 
 ## VS Code And Local Folder Use
 
@@ -378,5 +634,7 @@ To work from a local copy:
 
 ## Future Growth
 
-- Add a blog or updates section using a new Astro content collection if Marie wants to publish articles or notices.
+- Add more evergreen guides only when the topic is clearly useful and distinct.
 - Add more FAQ entries only after manual review of tone, compliance, and confidentiality implications.
+- Revisit Astro 6 after stable release notes show a clear operational gain.
+- Revisit stricter CSP or Trusted Types only if third-party scripts are introduced.
