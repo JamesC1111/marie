@@ -25,4 +25,4 @@ It may help to:
 - keep the first step small and practical
 - treat support as part of caring for the rest of life, not separate from it
 
-If the practical side is what is holding you back, the [Fees and cancellations](/fees-and-cancellations) and [Contact page](/contact) may help.
+If the practical side is what is holding you back, the [Contact page](/contact) may help.

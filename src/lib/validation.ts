@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { preferredContactOptions, preferredTimeValues } from "./contact-form";
+
 const PHONE_PATTERN = /^[0-9+\s()/-]+$/;
 
 export const contactSchema = z
@@ -7,10 +9,19 @@ export const contactSchema = z
     name: z.string().trim().min(2, "Please enter your name.").max(80),
     email: z.string().trim().max(160).optional().or(z.literal("")),
     phone: z.string().trim().max(40).optional().or(z.literal("")),
-    preferredContact: z.enum(["Phone", "Email", "Either"], {
+    preferredContact: z.enum(preferredContactOptions, {
       errorMap: () => ({ message: "Please choose a contact method." }),
     }),
-    preferredTimes: z.string().trim().max(120).optional().or(z.literal("")),
+    preferredTimes: z
+      .string()
+      .trim()
+      .max(120)
+      .refine(
+        (value) => value === "" || preferredTimeValues.some((option) => option === value),
+        "Please choose a valid preferred time.",
+      )
+      .optional()
+      .or(z.literal("")),
     message: z.string().trim().min(12, "Please add a short message.").max(1200),
     consent: z.literal("on", {
       errorMap: () => ({ message: "Please confirm consent to be contacted." }),
@@ -80,7 +91,7 @@ export const callbackSchema = z
     name: z.string().trim().min(2, "Please enter your name.").max(80),
     email: z.string().trim().max(160).optional().or(z.literal("")),
     phone: z.string().trim().max(40).optional().or(z.literal("")),
-    preferredContact: z.enum(["Phone", "Email", "Either"], {
+    preferredContact: z.enum(preferredContactOptions, {
       errorMap: () => ({ message: "Please choose a contact method." }),
     }),
     preferredTimes: z.string().trim().max(120).optional().or(z.literal("")),

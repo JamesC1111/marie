@@ -4,6 +4,7 @@ import CallbackCapture from '../components/CallbackCapture.astro';
 import Icon from '../components/Icon.astro';
 import PageHeader from '../components/PageHeader.astro';
 import SupportPanel from '../components/SupportPanel.astro';
+import { preferredContactOptions, preferredTimeOptionsByContact } from '../lib/contact-form';
 import { getContactDeliveryConfig } from '../lib/contact-delivery';
 import { getRequestHost } from '../lib/request';
 import { localBusinessSchema } from '../lib/schema';
@@ -139,6 +140,7 @@ const alertCopy =
           <p class="mt-4 text-slate-700">You are welcome to keep your first message brief. A few lines is enough.</p>
           <p class="mt-2 text-slate-700">Please do not include highly sensitive details in this form.</p>
           <p class="mt-1 text-sm text-slate-600">Messages are sent to email and are not stored on this website.</p>
+          <p class="mt-1 text-sm text-slate-600">Payment arrangements can be discussed after an initial consultation by phone or email.</p>
 
           <form action="/api/contact" method="post" class="form-grid mt-6" novalidate>
             <div>
@@ -162,20 +164,26 @@ const alertCopy =
                 <label for="preferredContact">Preferred contact method</label>
                 <select id="preferredContact" name="preferredContact" required>
                   <option value="">Select one</option>
-                  <option value="Phone">Phone</option>
-                  <option value="Email">Email</option>
-                  <option value="Either">Either</option>
+                  {preferredContactOptions.map((option) => (
+                    <option value={option}>{option}</option>
+                  ))}
                 </select>
               </div>
               <div>
                 <label for="preferredTimes">Preferred times</label>
-                <input
-                  id="preferredTimes"
-                  name="preferredTimes"
-                  type="text"
-                  maxlength="120"
-                  placeholder="Example: weekday evenings"
-                />
+                <select id="preferredTimes" name="preferredTimes" aria-describedby="preferred-times-help">
+                  <option value="">Select one</option>
+                  {preferredContactOptions.map((contactOption) => (
+                    <optgroup label={`${contactOption} options`}>
+                      {preferredTimeOptionsByContact[contactOption].map((option) => (
+                        <option value={option.value}>{option.label}</option>
+                      ))}
+                    </optgroup>
+                  ))}
+                </select>
+                <p id="preferred-times-help" class="mt-2 text-sm text-slate-600">
+                  Preferred time options update after you choose a contact method.
+                </p>
               </div>
             </div>
 
@@ -202,6 +210,35 @@ const alertCopy =
       )}
     </section>
   </section>
+
+  <script is:inline define:vars={{ preferredTimeOptionsByContact }}>
+    const preferredContact = document.getElementById('preferredContact');
+    const preferredTimes = document.getElementById('preferredTimes');
+
+    if (preferredContact instanceof HTMLSelectElement && preferredTimes instanceof HTMLSelectElement) {
+      const optionsByContact = preferredTimeOptionsByContact;
+
+      const buildOptions = (selectedContact) => {
+        const previousValue = preferredTimes.value;
+        const nextOptions = selectedContact ? optionsByContact[selectedContact] ?? [] : [];
+
+        preferredTimes.innerHTML = '';
+        preferredTimes.append(new Option('Select one', ''));
+
+        for (const option of nextOptions) {
+          preferredTimes.append(new Option(option.label, option.value));
+        }
+
+        const canReusePreviousValue = nextOptions.some((option) => option.value === previousValue);
+        preferredTimes.value = canReusePreviousValue ? previousValue : '';
+      };
+
+      buildOptions(preferredContact.value);
+      preferredContact.addEventListener('change', () => {
+        buildOptions(preferredContact.value);
+      });
+    }
+  </script>
 
   <div class="mt-14">
     <CallbackCapture

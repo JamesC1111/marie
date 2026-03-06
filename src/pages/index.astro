@@ -106,7 +106,7 @@ const homeFaqs = practicalFaqs.slice(0, 4);
         <p class="metric-copy">Marie worked with the HSE from {serviceSignals.hseExperience}.</p>
       </article>
       <article class="metric-card">
-        <p class="metric-value">NAPCP</p>
+        <p class="metric-value">APCP Â· ACI</p>
         <p class="metric-label">Professional supervision</p>
         <p class="metric-copy">{serviceSignals.supervision}.</p>
       </article>
@@ -168,7 +168,7 @@ const homeFaqs = practicalFaqs.slice(0, 4);
         <ServiceCard
           title={service.data.title}
           summary={service.data.summary}
-          href={`/services/${getEntrySlug(service.id)}/`}
+          href={`/services/${getEntrySlug(service.id)}`}
         />
       ))}
     </div>
@@ -209,7 +209,7 @@ const homeFaqs = practicalFaqs.slice(0, 4);
           summary={guide.data.summary}
           href={`/guides/${getEntrySlug(guide.id)}`}
           label={guide.data.category}
-          meta={`${formatArticleDate(guide.data.published)} · ${getReadingTime(guide.body)} min read`}
+          meta={`${formatArticleDate(guide.data.published)} ï¿½ ${getReadingTime(guide.body)} min read`}
         />
       ))}
     </div>
@@ -233,7 +233,7 @@ const homeFaqs = practicalFaqs.slice(0, 4);
           summary={entry.data.summary}
           href={`/insights/${getEntrySlug(entry.id)}`}
           label={entry.data.category}
-          meta={`${formatArticleDate(entry.data.published)} · ${getReadingTime(entry.body)} min read`}
+          meta={`${formatArticleDate(entry.data.published)} ï¿½ ${getReadingTime(entry.body)} min read`}
         />
       ))}
     </div>

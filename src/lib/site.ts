@@ -9,7 +9,7 @@ export const siteConfig = {
   areaServed: ["Kanturk", "North Cork", "Co. Cork"],
   sameAs: [
     "https://www.google.com/maps/search/?api=1&query=12+Percival+Street,+Kanturk,+Co.+Cork",
-    "https://www.napcp.ie/",
+    "https://www.apcp.ie/",
   ],
 } as const;
 
@@ -34,7 +34,7 @@ export const serviceSignals = {
   hseYears: 2016 - 1999,
   fullTimeKanturkSince: "July 2018",
   kanturkYears: currentYear - 2018,
-  supervision: "Accredited supervisor with the NAPCP",
+  supervision: "APCP and ACI accredited supervisor",
   openingNote: "Day and evening appointments.",
 } as const;
 
@@ -98,7 +98,6 @@ export const navLinks = [
   { href: "/about-marie", label: "About Marie" },
   { href: "/how-counselling-works", label: "How counselling works" },
   { href: "/services", label: "Services" },
-  { href: "/fees-and-cancellations", label: "Fees" },
   { href: "/resources", label: "Resources" },
   { href: "/contact", label: "Contact" },
 ] as const;

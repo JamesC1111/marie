@@ -9,7 +9,6 @@ const staticRoutes = [
   "/about-marie",
   "/how-counselling-works",
   "/services",
-  "/fees-and-cancellations",
   "/resources",
   "/guides",
   "/insights",

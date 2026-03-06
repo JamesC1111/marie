@@ -2,7 +2,7 @@
 title: Professional supervision
 summary: Professional supervision for counsellors, including reflective and ethical support in practice.
 metaTitle: Counselling supervision in Kanturk
-metaDescription: Professional supervision in Kanturk, Co. Cork. Accredited supervisor with the NAPCP.
+metaDescription: Professional supervision in Kanturk, Co. Cork. APCP and ACI accredited supervisor.
 order: 8
 serviceArea: North Cork
 ---

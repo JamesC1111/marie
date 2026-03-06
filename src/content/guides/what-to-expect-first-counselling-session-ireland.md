@@ -51,7 +51,7 @@ You are entitled to ask practical questions, including:
 - how cancellations work
 - what kind of pace may suit you
 
-The [FAQ page](/faq) and [Fees and cancellations](/fees-and-cancellations) page can also help with this side of things.
+The [FAQ page](/faq) and [Contact page](/contact) can also help with this side of things.
 
 ## If you feel nervous
 

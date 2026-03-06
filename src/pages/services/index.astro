@@ -46,7 +46,7 @@ const services = (await getCollection('services')).sort(
         <ServiceCard
           title={service.data.title}
           summary={service.data.summary}
-          href={`/services/${getEntrySlug(service.id)}/`}
+          href={`/services/${getEntrySlug(service.id)}`}
         />
       ))}
     </div>

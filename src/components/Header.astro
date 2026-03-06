@@ -53,12 +53,12 @@ function isCurrent(href: string) {
     </details>
 
     <nav class="mt-4 hidden md:block" aria-label="Primary">
-      <ul class="flex flex-wrap gap-3">
+      <ul class="grid grid-cols-3 gap-3 lg:grid-cols-6">
         {navLinks.map((item) => (
-          <li>
+          <li class="min-w-0">
             <a
               aria-current={isCurrent(item.href) ? 'page' : undefined}
-              class="nav-link"
+              class="nav-link flex min-h-[3.2rem] w-full items-center justify-center px-3 py-3 text-center leading-tight"
               href={item.href}
             >
               {item.label}
