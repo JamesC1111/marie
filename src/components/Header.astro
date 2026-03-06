@@ -35,7 +35,11 @@ function isCurrent(href: string) {
         <ul class="space-y-2">
           {navLinks.map((item) => (
             <li>
-              <a aria-current={isCurrent(item.href) ? 'page' : undefined} href={item.href}>
+              <a
+                aria-current={isCurrent(item.href) ? 'page' : undefined}
+                href={item.href}
+                data-speculate="intent"
+              >
                 {item.label}
               </a>
             </li>
@@ -60,6 +64,7 @@ function isCurrent(href: string) {
               aria-current={isCurrent(item.href) ? 'page' : undefined}
               class="nav-link flex min-h-[3.2rem] w-full items-center justify-center px-3 py-3 text-center leading-tight"
               href={item.href}
+              data-speculate="intent"
             >
               {item.label}
             </a>

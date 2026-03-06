@@ -42,4 +42,4 @@ services:
       - key: PUBLIC_NEWSLETTER_BUTTON_LABEL
         value: Join updates
       - key: PUBLIC_SPECULATION_RULES_ENABLED
-        value: "false"
+        value: "true"
