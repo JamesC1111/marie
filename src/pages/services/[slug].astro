@@ -1,0 +1,67 @@
+---
+import { getCollection, render } from 'astro:content';
+
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Layout from '../../layouts/Layout.astro';
+import { getEntrySlug } from '../../lib/content';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const services = await getCollection('services');
+
+  return services.map((service) => ({
+    params: { slug: getEntrySlug(service.id) },
+    props: { service }
+  }));
+}
+
+const { service } = Astro.props;
+const { Content } = await render(service);
+---
+
+<Layout
+  title={service.data.metaTitle}
+  description={service.data.metaDescription}
+  canonicalPath={`/services/${getEntrySlug(service.id)}`}
+>
+  <div class="space-y-6">
+    <Breadcrumbs
+      items={[
+        { label: 'Home', href: '/' },
+        { label: 'Services', href: '/services' },
+        { label: service.data.title }
+      ]}
+    />
+    <PageHeader title={service.data.title} intro={service.data.summary} />
+  </div>
+
+  <div class={`mt-8 grid gap-8 ${service.data.highlightItems && service.data.highlightItems.length > 0 ? 'lg:grid-cols-[minmax(0,1.2fr)_20rem] lg:items-start' : ''}`}>
+    {service.data.highlightItems && service.data.highlightItems.length > 0 && (
+      <aside class="rounded-3xl border border-teal-200 bg-teal-50/70 p-5 shadow-sm lg:col-start-2 lg:row-span-2" aria-label={service.data.highlightTitle ?? 'Page highlights'}>
+        {service.data.highlightTitle && (
+          <p class="text-xs font-semibold uppercase tracking-[0.18em] text-teal-900">{service.data.highlightTitle}</p>
+        )}
+        <ul class="mt-4 space-y-2">
+          {service.data.highlightItems.map((item) => (
+            <li>
+              <span class="block rounded-2xl border border-teal-200 bg-white px-4 py-3 text-left text-base text-slate-800 shadow-sm">{item}</span>
+            </li>
+          ))}
+        </ul>
+      </aside>
+    )}
+
+    <article class="content-prose service-prose lg:col-start-1">
+      <Content />
+    </article>
+
+    <section class={`rounded-[2rem] border border-slate-200 bg-white/90 p-6 shadow-sm ${service.data.highlightItems && service.data.highlightItems.length > 0 ? 'lg:col-start-1' : ''}`}>
+      <h2 class="text-xl font-semibold text-slate-900">Need urgent help?</h2>
+      <p class="mt-2 text-slate-700">
+        This practice is not an emergency service. If you need urgent help, call 112 or 999. Samaritans freephone 116 123.
+      </p>
+    </section>
+  </div>
+</Layout>

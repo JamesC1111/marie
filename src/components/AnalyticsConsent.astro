@@ -1,0 +1,69 @@
+---
+import { analyticsConfig } from '../lib/site';
+
+const isEnabled = analyticsConfig.enabled && analyticsConfig.domain;
+---
+
+{
+  isEnabled && (
+    <>
+      <div
+        id="cookie-banner"
+        class="fixed bottom-20 right-4 z-40 max-w-sm rounded-2xl border border-slate-200 bg-white p-4 shadow-lg print:hidden"
+        hidden
+      >
+        <p class="text-sm text-slate-700">
+          This site can use privacy-focused analytics to understand anonymous visits. You can accept or decline.
+        </p>
+        <div class="mt-4 flex gap-3">
+          <button
+            type="button"
+            class="inline-flex items-center justify-center rounded-full border border-teal-200 bg-teal-50 px-4 py-2 text-sm font-semibold text-teal-900 transition hover:border-teal-300 hover:bg-teal-100"
+            data-consent="decline"
+          >
+            Decline
+          </button>
+          <button
+            type="button"
+            class="inline-flex items-center justify-center rounded-full border border-transparent bg-teal-800 px-4 py-2 text-sm font-semibold text-white transition hover:bg-teal-900"
+            data-consent="accept"
+          >
+            Accept
+          </button>
+        </div>
+      </div>
+
+      <script is:inline define:vars={{ src: analyticsConfig.scriptSrc, domain: analyticsConfig.domain }}>
+        const key = 'mhcs-analytics-consent';
+        const banner = document.getElementById('cookie-banner');
+
+        const loadAnalytics = () => {
+          if (document.querySelector('script[data-analytics="plausible"]')) return;
+          const script = document.createElement('script');
+          script.src = src;
+          script.defer = true;
+          script.dataset.domain = domain;
+          script.dataset.analytics = 'plausible';
+          document.head.appendChild(script);
+        };
+
+        const consent = localStorage.getItem(key);
+        if (consent === 'accept') {
+          loadAnalytics();
+        } else {
+          banner?.removeAttribute('hidden');
+        }
+
+        banner?.addEventListener('click', (event) => {
+          const target = event.target;
+          if (!(target instanceof HTMLButtonElement)) return;
+          const value = target.dataset.consent;
+          if (!value) return;
+          localStorage.setItem(key, value);
+          if (value === 'accept') loadAnalytics();
+          banner.setAttribute('hidden', 'true');
+        });
+      </script>
+    </>
+  )
+}

@@ -1,0 +1,88 @@
+---
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Layout from '../layouts/Layout.astro';
+import { serviceSignals } from '../lib/site';
+---
+
+<Layout
+  title="About Marie Harding | Counsellor in Kanturk"
+  description="Learn about Marie Harding's background in private practice and the HSE, and how she works in Kanturk, Co. Cork."
+  canonicalPath="/about-marie"
+>
+  <div class="space-y-6">
+    <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'About Marie' }]} />
+    <PageHeader
+      title="About Marie"
+      intro="I aim to provide a calm, respectful space where you can speak openly and feel heard."
+    />
+  </div>
+
+  <section class="mt-8 grid gap-5 md:grid-cols-2">
+    <article class="rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-sm">
+      <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Private practice</p>
+      <h2 class="mt-2 text-xl font-semibold text-slate-900">Since {serviceSignals.privatePracticeSince}</h2>
+      <p class="mt-3 text-slate-700">Marie opened the doors to private practice in 1995 and continues that work in Kanturk, Co. Cork.</p>
+    </article>
+    <article class="rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-sm">
+      <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">HSE background</p>
+      <h2 class="mt-2 text-xl font-semibold text-slate-900">HSE experience</h2>
+      <p class="mt-3 text-slate-700">Marie worked with the HSE from {serviceSignals.hseExperience} while continuing private practice work.</p>
+    </article>
+    <article class="rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-sm">
+      <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">How Marie works</p>
+      <h2 class="mt-2 text-xl font-semibold text-slate-900">Confidentiality and respect</h2>
+      <p class="mt-3 text-slate-700">The practice is grounded in confidentiality, a practical approach, and a calm pace that allows people to speak openly.</p>
+    </article>
+    <article class="rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-sm">
+      <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Professional supervision</p>
+      <h2 class="mt-2 text-xl font-semibold text-slate-900">APCP and ACI accredited supervisor</h2>
+      <p class="mt-3 text-slate-700">Professional supervision is part of the practice, with Marie listed as an APCP and ACI accredited supervisor.</p>
+    </article>
+  </section>
+
+  <article class="content-prose mt-10">
+    <h2>My story</h2>
+    <p>
+      In my adult life I benefited greatly from counselling due to personal circumstances including addiction and bereavement.
+      Because of that experience, I was encouraged to pursue a career in counselling.
+      I wanted to use what I had learned to help others, so I began studying and qualified as an accredited counsellor.
+    </p>
+    <p>
+      I opened the doors to my private clinic in 1995.
+      In 1999, I was offered an opportunity to work with the HSE.
+      I worked with the HSE until 2016 while continuing to run my private clinics part-time.
+    </p>
+    <p>
+      After retiring from the HSE, I dedicated my time fully to my professional counselling practice, which I opened in
+      July 2018 in Kanturk, Co. Cork.
+    </p>
+
+    <h2>How I work</h2>
+    <p>
+      My approach is practical, person-centred, and grounded in confidentiality.
+      Confidentiality is of the utmost importance to me when working with clients.
+    </p>
+    <p>
+      I support adults, teenagers, families, and professionals across a range of concerns, including addiction,
+      bereavement, anxiety, depression, relationships, confidence, workplace or school bullying, and trauma-informed support.
+    </p>
+    <p>
+      I also provide professional supervision and I am an APCP and ACI accredited supervisor.
+    </p>
+
+    <h2>A little about me outside work</h2>
+    <p>
+      In my spare time I enjoy nature trails, daily meditation, reading, travelling, and time with family and friends.
+      I am an avid sports fan and a proud supporter of Munster Rugby and Cork teams.
+    </p>
+
+    <h2>Practice details</h2>
+    <ul class="practice-details-list">
+      <li>Private practice since {serviceSignals.privatePracticeSince}</li>
+      <li>HSE experience from {serviceSignals.hseExperience}</li>
+      <li>Full-time practice in Kanturk since {serviceSignals.fullTimeKanturkSince}</li>
+      <li>{serviceSignals.supervision}</li>
+    </ul>
+  </article>
+</Layout>

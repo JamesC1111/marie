@@ -1,0 +1,69 @@
+---
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Layout from '../layouts/Layout.astro';
+import { practiceContact } from '../lib/site';
+---
+
+<Layout
+  title="Privacy policy"
+  description="Privacy policy for Marie Harding Counselling Service website and contact form."
+  canonicalPath="/privacy-policy"
+>
+  <div class="space-y-6">
+    <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Privacy policy' }]} />
+    <PageHeader
+      title="Privacy policy"
+      intro="How personal information is handled on this website."
+    />
+  </div>
+
+  <article class="content-prose mt-8">
+    <h2>Who this policy applies to</h2>
+    <p>
+      This policy applies to the website for Marie Harding Counselling Service, based in Kanturk, Co. Cork.
+    </p>
+
+    <h2>Information collected</h2>
+    <p>
+      If you use the contact form, you may provide your name, email address, phone number, preferred contact details,
+      and a short message.
+    </p>
+    <p>
+      Please do not include highly sensitive personal information in the contact form.
+    </p>
+
+    <h2>How your information is used</h2>
+    <p>
+      Contact form messages are sent to email for the purpose of responding to your enquiry.
+      Messages are not stored in a website database.
+    </p>
+
+    <h2>Lawful basis</h2>
+    <p>
+      Information submitted through the contact form is processed on the basis of consent and legitimate interest in responding to enquiries.
+    </p>
+
+    <h2>Data sharing</h2>
+    <p>
+      Information is not sold. It may be processed by email service providers used to send and receive enquiries.
+    </p>
+
+    <h2>Data retention</h2>
+    <p>
+      Enquiry emails may be retained only as long as needed for communication and record-keeping.
+    </p>
+
+    <h2>Your rights</h2>
+    <p>
+      You may request access, correction, or deletion of your personal data, subject to legal obligations.
+    </p>
+
+    <h2>Contact</h2>
+    <p>
+      For privacy questions, contact: <a href={`mailto:${practiceContact.email}`}>{practiceContact.email}</a>
+    </p>
+
+    <p><strong>Last updated:</strong> 5 March 2026.</p>
+  </article>
+</Layout>

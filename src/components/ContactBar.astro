@@ -1,0 +1,22 @@
+---
+import { ctaLinks } from '../lib/site';
+import Icon from './Icon.astro';
+---
+
+<div
+  class="fixed inset-x-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-30 grid grid-cols-3 overflow-hidden rounded-2xl border border-slate-200 bg-white/95 shadow-lg backdrop-blur md:hidden print:hidden"
+  role="complementary"
+  aria-label="Quick contact actions"
+>
+  <a href={ctaLinks.call} class="inline-flex items-center justify-center gap-2 border-r border-slate-200 px-2 py-3 text-sm font-semibold text-teal-900">
+    <Icon name="phone" class="h-4 w-4" />
+    Call
+  </a>
+  <a href={ctaLinks.email} class="inline-flex items-center justify-center gap-2 border-r border-slate-200 px-2 py-3 text-sm font-semibold text-teal-900">
+    <Icon name="email" class="h-4 w-4" />
+    Email
+  </a>
+  <a href={ctaLinks.request} class="inline-flex items-center justify-center gap-2 px-2 py-3 text-sm font-semibold text-teal-900">
+    Request
+  </a>
+</div>

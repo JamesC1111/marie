@@ -1,0 +1,88 @@
+---
+import '../styles/global.css';
+
+import AnalyticsConsent from '../components/AnalyticsConsent.astro';
+import CTASection from '../components/CTASection.astro';
+import ContactBar from '../components/ContactBar.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { defaultMeta, siteConfig } from '../lib/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonicalPath?: string;
+  imagePath?: string;
+  noIndex?: boolean;
+  schema?: Record<string, unknown>[];
+  showPageCta?: boolean;
+}
+
+const {
+  title = defaultMeta.title,
+  description = defaultMeta.description,
+  canonicalPath = Astro.url.pathname,
+  imagePath = '/images/og-default.svg',
+  noIndex = false,
+  schema = [],
+  showPageCta = true
+} = Astro.props;
+
+const canonicalUrl = new URL(canonicalPath, siteConfig.siteUrl).toString();
+const pageTitle = `${title} | ${siteConfig.name}`;
+const ogImageUrl = new URL(imagePath, siteConfig.siteUrl).toString();
+---
+
+<!doctype html>
+<html lang="en-IE">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f8fafc" />
+    {noIndex && <meta name="robots" content="noindex, nofollow" />}
+
+    <title>{pageTitle}</title>
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:locale" content="en_IE" />
+    <meta property="og:site_name" content={siteConfig.name} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    {schema.map((entry) => (
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(entry)} />
+    ))}
+  </head>
+  <body>
+    <a
+      class="absolute left-4 top-0 z-50 -translate-y-full rounded-xl bg-slate-950 px-3 py-2 text-sm font-medium text-white transition focus:translate-y-4"
+      href="#main-content"
+    >
+      Skip to main content
+    </a>
+    <Header />
+    <main id="main-content" class="mx-auto w-full max-w-6xl px-5 pb-28 pt-10 md:px-8 md:pb-20">
+      <slot />
+      {showPageCta && (
+        <div class="mt-14 print:hidden">
+          <CTASection />
+        </div>
+      )}
+    </main>
+    <Footer />
+    <ContactBar />
+    <AnalyticsConsent />
+  </body>
+</html>

@@ -1,0 +1,87 @@
+name: Site Health
+
+on:
+  schedule:
+    - cron: "0 8 * * 1"
+  workflow_dispatch:
+
+jobs:
+  site-health:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build site
+        id: build
+        continue-on-error: true
+        run: npm run build
+
+      - name: Run custom health checks
+        id: health
+        if: steps.build.outcome == 'success'
+        continue-on-error: true
+        run: npm run check:health
+
+      - name: Run Lighthouse CI
+        id: lighthouse
+        if: steps.build.outcome == 'success'
+        continue-on-error: true
+        run: npx lhci autorun --config=./lighthouserc.cjs
+
+      - name: Compose workflow report
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p artifacts
+          if [ ! -f artifacts/site-health-report.md ]; then
+            cat <<'EOF' > artifacts/site-health-report.md
+          # Site Health Report
+
+          Generated: unavailable
+
+          EOF
+          fi
+
+          {
+            echo ""
+            echo "## Workflow"
+            echo ""
+            echo "- Build: ${{ steps.build.outcome }}"
+            echo "- Custom health checks: ${{ steps.health.outcome || 'skipped' }}"
+            echo "- Lighthouse CI: ${{ steps.lighthouse.outcome || 'skipped' }}"
+            echo ""
+            echo "Artifacts:"
+            echo "- Workflow artifact: site-health-report"
+            echo "- Lighthouse output directory: .lighthouseci"
+          } >> artifacts/site-health-report.md
+
+      - name: Upload report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-health-report
+          path: |
+            artifacts/site-health-report.md
+            artifacts/site-health-report.json
+            .lighthouseci
+
+      - name: Create issue on failure
+        if: failure()
+        uses: peter-evans/create-issue-from-file@v5
+        with:
+          title: "Site health failure: ${{ github.run_number }}"
+          content-filepath: artifacts/site-health-report.md
+          labels: |
+            site-health
+            automated

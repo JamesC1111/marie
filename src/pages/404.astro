@@ -1,0 +1,22 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Page not found"
+  description="The page you were looking for could not be found."
+  canonicalPath="/404"
+  noIndex={true}
+>
+  <section class="mx-auto max-w-2xl rounded-[2rem] border border-slate-200 bg-white/90 p-8 text-center shadow-sm">
+    <p class="text-sm font-medium uppercase tracking-wide text-teal-800">404</p>
+    <h1 class="mt-2 text-3xl font-semibold tracking-tight text-slate-900">Page not found</h1>
+    <p class="mt-4 text-slate-700">
+      The link may be out of date, or the page may have moved.
+    </p>
+    <div class="mt-6 flex justify-center gap-3">
+      <a class="inline-flex items-center justify-center rounded-full border border-transparent bg-teal-800 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-teal-900" href="/">Go to Home</a>
+      <a class="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-800 transition hover:border-slate-400 hover:bg-slate-50" href="/contact">Contact Marie</a>
+    </div>
+  </section>
+</Layout>

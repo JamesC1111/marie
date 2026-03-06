@@ -1,0 +1,112 @@
+---
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import FAQAccordion from '../components/FAQAccordion.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Layout from '../layouts/Layout.astro';
+
+const faqs = [
+  {
+    question: 'How long is a session?',
+    answer: 'Sessions are usually around 50 minutes. If you need a different format, please ask.'
+  },
+  {
+    question: 'Do you offer online sessions?',
+    answer: 'Please ask when you make contact. Availability can depend on your needs and schedule.'
+  },
+  {
+    question: 'What happens in the first session?',
+    answer: 'We talk about what brought you in, what support you are looking for, and how we might work together.'
+  },
+  {
+    question: 'Is what I say confidential?',
+    answer: 'Confidentiality is taken very seriously. If there are legal or safety limits, they are explained clearly at the start.'
+  },
+  {
+    question: 'How do cancellations work?',
+    answer: 'Please give as much notice as possible. Practical details, including cancellations, can be discussed when you make contact.'
+  },
+  {
+    question: 'Do you work with teenagers?',
+    answer: 'Yes, support for children and young people is available. Please ask about age suitability.'
+  },
+  {
+    question: 'Do I need a referral?',
+    answer: 'No referral is required. You can contact Marie directly.'
+  },
+  {
+    question: 'Do you accept medical cards?',
+    answer: 'Please ask when making contact.'
+  }
+];
+---
+
+<Layout
+  title="How counselling works"
+  description="A clear step-by-step guide to starting counselling with Marie Harding in Kanturk, Co. Cork."
+  canonicalPath="/how-counselling-works"
+>
+  <div class="space-y-6">
+    <Breadcrumbs
+      items={[
+        { label: 'Home', href: '/' },
+        { label: 'How counselling works' }
+      ]}
+    />
+    <PageHeader
+      title="How counselling works"
+      intro="Counselling should feel clear and manageable. Here is what to expect from first contact to ongoing sessions."
+    />
+  </div>
+
+  <section class="mt-8 grid gap-4 md:grid-cols-3">
+    <article class="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm">
+      <h2 class="text-xl font-semibold text-slate-900">1. Reach out</h2>
+      <p class="mt-3 text-slate-700">You can contact me by phone or email to ask about availability and appointment times.</p>
+    </article>
+    <article class="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm">
+      <h2 class="text-xl font-semibold text-slate-900">2. Short initial chat</h2>
+      <p class="mt-3 text-slate-700">We have a short conversation about what support you need and whether this feels like the right fit.</p>
+    </article>
+    <article class="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm">
+      <h2 class="text-xl font-semibold text-slate-900">3. First session</h2>
+      <p class="mt-3 text-slate-700">In the first session we discuss your goals, immediate concerns, and what ongoing support may look like.</p>
+    </article>
+  </section>
+
+  <article class="content-prose mt-10">
+    <h2>What sessions are like</h2>
+    <p>
+      Sessions are a private, one-to-one space. You set the pace. We focus on what matters most to you, with clear and practical support.
+    </p>
+
+    <h2>Confidentiality</h2>
+    <p>
+      Confidentiality is of the utmost importance to me when working with clients.
+      Any limits to confidentiality are explained clearly so you know where you stand.
+    </p>
+
+    <h2>Practical expectations</h2>
+    <p>
+      Practical details can be discussed clearly before booking so expectations feel straightforward and manageable.
+    </p>
+    <p>
+      Payments are discussed after an initial consultation by phone or email.
+    </p>
+    <p>
+      Clients under 16 need a parent or guardian's permission before counselling can begin.
+    </p>
+
+    <h2>Emergency care</h2>
+    <p>
+      This practice is not an emergency or crisis service.
+      If you need urgent help, call 112 or 999. Samaritans freephone 116 123.
+    </p>
+  </article>
+
+  <section class="mt-12 max-w-4xl">
+    <h2 class="text-2xl font-semibold tracking-tight text-slate-900">Frequently asked questions</h2>
+    <div class="mt-5">
+      <FAQAccordion items={faqs} />
+    </div>
+  </section>
+</Layout>

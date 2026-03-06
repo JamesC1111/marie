@@ -1,0 +1,51 @@
+---
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Terms of use"
+  description="Terms of use for the Marie Harding Counselling Service website."
+  canonicalPath="/terms-of-use"
+>
+  <div class="space-y-6">
+    <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Terms of use' }]} />
+    <PageHeader title="Terms of use" intro="Please read these terms before using this website." />
+  </div>
+
+  <article class="content-prose mt-8">
+    <h2>Website purpose</h2>
+    <p>
+      This website provides general information about Marie Harding Counselling Service and how to make contact.
+    </p>
+
+    <h2>No emergency service</h2>
+    <p>
+      This website and counselling service are not emergency or crisis services.
+      If you need urgent help, call 112 or 999. Samaritans freephone 116 123.
+    </p>
+
+    <h2>No medical advice</h2>
+    <p>
+      Website content is for general information only and does not replace medical advice, diagnosis, or emergency support.
+    </p>
+
+    <h2>Use of contact form</h2>
+    <p>
+      Please provide accurate contact details and avoid sharing highly sensitive information in the form.
+    </p>
+
+    <h2>External links</h2>
+    <p>
+      This website may link to third-party resources. Marie Harding Counselling Service is not responsible for third-party content.
+    </p>
+
+    <h2>Changes</h2>
+    <p>
+      These terms may be updated from time to time. Continued use of the website indicates acceptance of any updates.
+    </p>
+
+    <p><strong>Last updated:</strong> 5 March 2026.</p>
+  </article>
+</Layout>
