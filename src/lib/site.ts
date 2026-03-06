@@ -1,4 +1,6 @@
-﻿export const siteConfig = {
+const currentYear = new Date().getUTCFullYear();
+
+export const siteConfig = {
   name: "Marie Harding Counselling Service",
   description:
     "Counselling support in Kanturk, Co. Cork. Calm, confidential and practical support for adults, young people and families.",
@@ -25,14 +27,69 @@ export const practiceContact = {
 
 export const serviceSignals = {
   privatePracticeSince: "1995",
+  privatePracticeYears: currentYear - 1995,
   hseExperience: "1999 to 2016",
+  hseYears: 2016 - 1999,
   fullTimeKanturkSince: "July 2018",
+  kanturkYears: currentYear - 2018,
   supervision: "Accredited supervisor with the NAPCP",
   openingNote: "Day and evening appointments.",
 } as const;
 
 export const urgentHelpText =
   "If you need urgent help, call 112 or 999. Samaritans freephone 116 123.";
+
+export const urgentSupportLinks = {
+  emergency: {
+    label: "Emergency services",
+    href: "tel:112",
+    display: "112 / 999",
+    note: "Call emergency services straight away if there is immediate danger.",
+  },
+  samaritans: {
+    label: "Samaritans",
+    href: "tel:116123",
+    display: "116 123",
+    note: "24-hour emotional support by phone.",
+  },
+  pieta: {
+    label: "Pieta",
+    href: "tel:1800247247",
+    display: "1800 247 247",
+    textDisplay: "Text HELP to 51444",
+    textHref: "sms:51444?body=HELP",
+    note: "Crisis support for suicidal distress and self-harm.",
+  },
+  hseUrgent: {
+    label: "HSE urgent mental health help",
+    href: "https://www2.hse.ie/mental-health/services-support/get-urgent-help/",
+    note: "Official HSE urgent mental health guidance and next steps.",
+  },
+  hseInfo: {
+    label: "HSE Your Mental Health information line",
+    href: "tel:1800111888",
+    display: "1800 111 888",
+    note: "Information about mental health supports and services in Ireland.",
+  },
+} as const;
+
+export const localSupportLinks = {
+  growCork: {
+    label: "Grow Cork support-group listings",
+    href: "https://grow.ie/mental-health-support/",
+    note: "Use Grow's official support-group finder to check current Cork meetings.",
+  },
+  corkSamaritans: {
+    label: "Cork Samaritans branch",
+    href: "https://www.samaritans.org/branches/cork/",
+    note: "Local branch information for Cork city and county.",
+  },
+  jigsawCork: {
+    label: "Jigsaw Cork",
+    href: "https://jigsaw.ie/location/jigsaw-cork/",
+    note: "Free mental health support for young people in Cork city and county.",
+  },
+} as const;
 
 export const navLinks = [
   { href: "/", label: "Home" },

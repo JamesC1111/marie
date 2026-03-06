@@ -2,11 +2,12 @@
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import Icon from '../components/Icon.astro';
 import PageHeader from '../components/PageHeader.astro';
+import SupportPanel from '../components/SupportPanel.astro';
 import { getContactDeliveryConfig } from '../lib/contact-delivery';
 import { getRequestHost } from '../lib/request';
-import Layout from '../layouts/Layout.astro';
 import { localBusinessSchema } from '../lib/schema';
 import { practiceContact, serviceSignals } from '../lib/site';
+import Layout from '../layouts/Layout.astro';
 
 const status = Astro.url.searchParams.get('status');
 const error = Astro.url.searchParams.get('error');
@@ -28,8 +29,8 @@ const alertCopy =
 ---
 
 <Layout
-  title="Contact Marie Harding"
-  description="Contact Marie Harding Counselling Service by phone, email, or appointment request form."
+  title="Contact Marie Harding | Kanturk Counselling"
+  description="Call, email, or request an appointment with Marie Harding Counselling Service in Kanturk, Co. Cork."
   canonicalPath="/contact"
   schema={[localBusinessSchema()]}
 >
@@ -37,14 +38,14 @@ const alertCopy =
     <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Contact' }]} />
     <PageHeader
       title="Contact"
-      intro="If you would like to ask about availability, you can contact me by phone or email. Day and evening appointments."
+      intro="If you would like to ask about availability, you can contact me by phone or email. You are welcome to keep your first message short. Day and evening appointments."
     />
   </div>
 
   {alertCopy && (
     <section
       id="contact-status"
-      class={`mt-8 rounded-xl border px-4 py-3 text-sm ${
+      class={`mt-8 rounded-[1.25rem] border px-4 py-3 text-sm ${
         status === 'success'
           ? 'border-emerald-300 bg-emerald-50 text-emerald-900'
           : 'border-amber-300 bg-amber-50 text-amber-900'
@@ -57,35 +58,56 @@ const alertCopy =
     </section>
   )}
 
-  <section class="mt-8 grid gap-8 lg:grid-cols-[1fr_1.2fr]">
+  <section class="contact-layout mt-8 grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
     <aside class="space-y-4">
-      <article class="card">
-        <h2 class="text-xl font-semibold text-slate-900">Contact details</h2>
-        <ul class="mt-4 space-y-3 text-slate-700">
-          <li>
-            <a class="inline-flex items-center gap-2 font-medium text-teal-900" href={`tel:+353872503743`}>
-              <Icon name="phone" class="h-4 w-4" />
-              Click to call: {practiceContact.phoneDisplay}
-            </a>
-          </li>
-          <li>
-            <a class="inline-flex items-center gap-2 font-medium text-teal-900" href={`mailto:${practiceContact.email}`}>
-              <Icon name="email" class="h-4 w-4" />
-              Tap to email: {practiceContact.email}
-            </a>
-          </li>
-          <li class="inline-flex items-start gap-2">
-            <Icon name="location" class="mt-0.5 h-4 w-4" />
-            <span>{practiceContact.addressLine1}, {practiceContact.addressLine2}</span>
-          </li>
+      <div class="contact-method-grid">
+        <article class="contact-method-card">
+          <p class="section-kicker">Phone</p>
+          <h2 class="mt-2 text-xl font-semibold text-slate-900">Call Marie</h2>
+          <p class="mt-3 text-slate-700">If speaking feels easier than writing, you can phone directly to ask about availability.</p>
+          <a class="service-card__link mt-5 inline-flex items-center gap-2 text-sm font-semibold text-teal-900" href={`tel:+353872503743`}>
+            <Icon name="phone" class="h-4 w-4" />
+            {practiceContact.phoneDisplay}
+          </a>
+        </article>
+
+        <article class="contact-method-card">
+          <p class="section-kicker">Email</p>
+          <h2 class="mt-2 text-xl font-semibold text-slate-900">Send an email</h2>
+          <p class="mt-3 text-slate-700">A short message is enough if you would prefer to write first.</p>
+          <a class="service-card__link mt-5 inline-flex items-center gap-2 text-sm font-semibold text-teal-900" href={`mailto:${practiceContact.email}`}>
+            <Icon name="email" class="h-4 w-4" />
+            {practiceContact.email}
+          </a>
+        </article>
+
+        <article class="contact-method-card">
+          <p class="section-kicker">Location</p>
+          <h2 class="mt-2 text-xl font-semibold text-slate-900">Kanturk, Co. Cork</h2>
+          <p class="mt-3 text-slate-700">Practice address: {practiceContact.addressLine1}, {practiceContact.addressLine2}. {serviceSignals.openingNote}</p>
+          <a class="service-card__link mt-5 inline-flex items-center gap-2 text-sm font-semibold text-teal-900" href={practiceContact.mapsLink} target="_blank" rel="noreferrer">
+            <Icon name="location" class="h-4 w-4" />
+            Open in Google Maps
+          </a>
+        </article>
+      </div>
+
+      <article class="soft-panel">
+        <p class="section-kicker">What helps in a first message</p>
+        <ul class="mini-list mt-4">
+          <li>Your name and preferred contact method.</li>
+          <li>A short note about what kind of support you are looking for.</li>
+          <li>Any days or times that usually suit you.</li>
         </ul>
-        <p class="mt-4 text-slate-700">{serviceSignals.openingNote}</p>
+        <p class="mt-4 text-sm text-slate-700">
+          If you need urgent or additional support, the <a class="link-subtle" href="/resources">Resources</a> page lists official Irish and Cork-relevant supports.
+        </p>
       </article>
 
-      <article class="card">
+      <article class="card overflow-hidden">
         <h2 class="text-xl font-semibold text-slate-900">Location map</h2>
         <p class="mt-2 text-sm text-slate-600">Plain text address: {practiceContact.addressLine1}, {practiceContact.addressLine2}</p>
-        <div class="mt-4 overflow-hidden rounded-xl border border-slate-200">
+        <div class="mt-4 overflow-hidden rounded-[1rem] border border-slate-200">
           <iframe
             src={practiceContact.mapsEmbedUrl}
             title="Map to Marie Harding Counselling Service"
@@ -94,26 +116,26 @@ const alertCopy =
             referrerpolicy="no-referrer-when-downgrade"
           ></iframe>
         </div>
-        <a class="mt-3 inline-flex text-sm font-semibold text-teal-800 hover:underline" href={practiceContact.mapsLink} target="_blank" rel="noreferrer">
-          Open map in Google Maps
-        </a>
       </article>
     </aside>
 
-    <section id="appointment-form" class="card">
-      <h2 class="text-2xl font-semibold tracking-tight text-slate-900">Request an appointment</h2>
+    <section id="appointment-form" class="section-shell px-6 py-7 md:px-8 md:py-8">
+      <p class="section-kicker">Request an appointment</p>
+      <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-900">Send a short enquiry</h2>
+
       {formUnavailable ? (
-        <div class="mt-6 space-y-4 rounded-2xl border border-amber-300 bg-amber-50 p-4 text-slate-800" role="alert">
+        <div class="contact-note mt-6" role="alert">
           <p class="font-medium text-amber-950">The online request form is temporarily unavailable.</p>
-          <p>If you would like to ask about availability, please call or email Marie directly.</p>
-          <div class="flex flex-wrap gap-3">
+          <p class="mt-2">If you would like to ask about availability, please call or email Marie directly.</p>
+          <div class="mt-4 flex flex-wrap gap-3">
             <a class="btn-primary" href={`tel:+353872503743`}>Call Marie</a>
             <a class="btn-secondary" href={`mailto:${practiceContact.email}`}>Email Marie</a>
           </div>
         </div>
       ) : (
         <>
-          <p class="mt-3 text-slate-700">Please do not include highly sensitive details in this form.</p>
+          <p class="mt-4 text-slate-700">You are welcome to keep your first message brief. A few lines is enough.</p>
+          <p class="mt-2 text-slate-700">Please do not include highly sensitive details in this form.</p>
           <p class="mt-1 text-sm text-slate-600">Messages are sent to email and are not stored on this website.</p>
 
           <form action="/api/contact" method="post" class="form-grid mt-6" novalidate>
@@ -165,7 +187,7 @@ const alertCopy =
               <input id="company" name="company" tabindex="-1" autocomplete="off" />
             </div>
 
-            <div class="rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
+            <div class="rounded-[1rem] border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
               <label class="inline-flex items-start gap-2" for="consent">
                 <input id="consent" name="consent" type="checkbox" required class="mt-1 h-4 w-4" />
                 <span>I consent to being contacted by Marie Harding Counselling Service regarding this enquiry.</span>
@@ -178,4 +200,8 @@ const alertCopy =
       )}
     </section>
   </section>
+
+  <div class="mt-14">
+    <SupportPanel intro="If you are looking for urgent help or a wider support option alongside counselling, these official services may be useful." />
+  </div>
 </Layout>

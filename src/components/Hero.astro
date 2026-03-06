@@ -1,4 +1,5 @@
-﻿---
+---
+import { ctaLinks, practiceContact, serviceSignals } from '../lib/site';
 import Icon from './Icon.astro';
 
 interface Props {
@@ -7,23 +8,61 @@ interface Props {
   locationLine?: string;
 }
 
-const { title, intro, locationLine = 'Kanturk, Co. Cork and North Cork' } = Astro.props;
+const {
+  title,
+  intro,
+  locationLine = 'Kanturk, Co. Cork'
+} = Astro.props;
 ---
 
-<section class="relative overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-b from-white to-slate-50 px-6 py-10 shadow-sm md:px-10 md:py-14">
-  <div class="absolute -right-16 -top-20 h-52 w-52 rounded-full bg-teal-100/70 blur-2xl" aria-hidden="true"></div>
-  <div class="absolute -left-20 bottom-0 h-40 w-40 rounded-full bg-amber-100/50 blur-2xl" aria-hidden="true"></div>
-  <div class="relative z-10 max-w-3xl">
-    <p class="mb-4 inline-flex items-center gap-2 rounded-full border border-teal-200 bg-teal-50 px-3 py-1 text-sm font-medium text-teal-900">
-      <Icon name="location" class="h-4 w-4" />
-      {locationLine}
-    </p>
-    <h1 class="text-balance text-4xl font-semibold tracking-tight text-slate-900 md:text-5xl">{title}</h1>
-    <p class="mt-5 max-w-2xl text-lg leading-relaxed text-slate-700">{intro}</p>
-    <div class="mt-7 flex flex-wrap gap-3">
-      <a class="btn-primary" href="tel:+353872503743">Call Marie</a>
-      <a class="btn-secondary" href="mailto:marieharding4@gmail.com">Email Marie</a>
-      <a class="btn-tertiary" href="/contact#appointment-form">Request appointment</a>
+<section class="hero-shell">
+  <div class="hero-grid">
+    <div class="hero-copy">
+      <p class="section-kicker">Marie Harding Counselling Service</p>
+      <p class="hero-location">
+        <Icon name="location" class="h-4 w-4" />
+        {locationLine}
+      </p>
+      <h1 class="text-balance text-4xl font-semibold tracking-tight text-slate-900 md:text-5xl">{title}</h1>
+      <p class="hero-lead">{intro}</p>
+      <p class="hero-reassurance">You do not need to explain everything in your first message.</p>
+
+      <div class="mt-7 flex flex-wrap gap-3">
+        <a class="btn-primary" href={ctaLinks.call}>Call Marie</a>
+        <a class="btn-secondary" href={ctaLinks.email}>Email Marie</a>
+        <a class="btn-tertiary" href={ctaLinks.request}>Request appointment</a>
+      </div>
+
+      <div class="hero-links mt-6 flex flex-wrap gap-3 text-sm">
+        <a class="link-subtle" href="/how-counselling-works">How counselling works</a>
+        <a class="link-subtle" href="/about-marie">About Marie</a>
+        <a class="link-subtle" href="/services">Explore services</a>
+      </div>
     </div>
+
+    <aside class="hero-panel" aria-label="Practice overview">
+      <p class="section-kicker">A steady first step</p>
+      <ul class="hero-panel__list mt-5 space-y-4">
+        <li>
+          <strong>{serviceSignals.privatePracticeYears} years in private practice</strong>
+          <span>Private practice since {serviceSignals.privatePracticeSince}.</span>
+        </li>
+        <li>
+          <strong>{serviceSignals.hseYears} years with the HSE</strong>
+          <span>Marie worked with the HSE from {serviceSignals.hseExperience}.</span>
+        </li>
+        <li>
+          <strong>Accredited supervisor with the NAPCP</strong>
+          <span>{serviceSignals.supervision}.</span>
+        </li>
+        <li>
+          <strong>Practice based in {practiceContact.addressLine2}</strong>
+          <span>{serviceSignals.openingNote}</span>
+        </li>
+      </ul>
+      <p class="hero-panel__note mt-5">
+        Confidentiality is of the utmost importance to me when working with clients.
+      </p>
+    </aside>
   </div>
 </section>

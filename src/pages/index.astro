@@ -1,70 +1,177 @@
-﻿---
+---
 import { getCollection } from 'astro:content';
 
+import FAQAccordion from '../components/FAQAccordion.astro';
 import Hero from '../components/Hero.astro';
 import ServiceCard from '../components/ServiceCard.astro';
 import Layout from '../layouts/Layout.astro';
 import { getEntrySlug } from '../lib/content';
-import { practiceContact, serviceSignals } from '../lib/site';
 import { localBusinessSchema, websiteSchema } from '../lib/schema';
+import { practiceContact, serviceSignals } from '../lib/site';
 
 const services = (await getCollection('services'))
   .sort((a, b) => a.data.order - b.data.order)
   .slice(0, 6);
+
+const homeFaqs = [
+  {
+    question: 'Do I need a referral?',
+    answer: 'No referral is required. You can contact Marie directly by phone, email, or the appointment form.'
+  },
+  {
+    question: 'What if I feel nervous about making contact?',
+    answer: 'That is very common. You can keep your first message brief and simply ask about availability.'
+  },
+  {
+    question: 'Do you offer online appointments?',
+    answer: 'In-person sessions are available in Kanturk, Co. Cork. If online appointments would suit you better, please ask when you get in touch.'
+  },
+  {
+    question: 'Is what I say confidential?',
+    answer: 'Confidentiality is taken very seriously. Any limits are explained clearly at the start so you know where you stand.'
+  }
+];
 ---
 
 <Layout
-  title="Counselling in Kanturk, Co. Cork"
-  description="Confidential counselling support with Marie Harding in Kanturk, Co. Cork. Day and evening appointments available."
+  title="Counselling in Kanturk | Marie Harding"
+  description="Confidential counselling with Marie Harding in Kanturk, Co. Cork. Private practice since 1995. Call, email, or request an appointment."
   canonicalPath="/"
   schema={[websiteSchema(), localBusinessSchema()]}
 >
   <Hero
-    title="Confidential counselling support in Kanturk, Co. Cork"
-    intro="If things feel heavy, you do not have to carry them alone. I offer a calm, private space to talk through what is happening at your pace."
+    title="Counselling with Marie Harding in Kanturk, Co. Cork"
+    intro="Accredited counsellor offering calm, confidential support for adults, young people, families, and professionals in Kanturk, Co. Cork and across North Cork."
   />
 
-  <section class="mt-12 grid gap-5 md:grid-cols-3">
-    <article class="card">
-      <h2 class="text-lg font-semibold text-slate-900">Experience you can trust</h2>
-      <p class="mt-3 text-slate-700">Private practice since {serviceSignals.privatePracticeSince}, with HSE experience from {serviceSignals.hseExperience}.</p>
-    </article>
-    <article class="card">
-      <h2 class="text-lg font-semibold text-slate-900">Local and accessible</h2>
-      <p class="mt-3 text-slate-700">Practice based at {practiceContact.addressLine1}, {practiceContact.addressLine2}. {serviceSignals.openingNote}</p>
-    </article>
-    <article class="card">
-      <h2 class="text-lg font-semibold text-slate-900">Professional support</h2>
-      <p class="mt-3 text-slate-700">{serviceSignals.supervision}. Confidentiality is of the utmost importance to me when working with clients.</p>
-    </article>
+  <section class="quick-link-grid mt-8">
+    <a class="quick-link-card" href="/about-marie">
+      <span class="section-kicker">About Marie</span>
+      <strong>Read Marie's story and experience</strong>
+      <span>Private practice since {serviceSignals.privatePracticeSince}, with HSE experience and a long-standing practice in Kanturk.</span>
+    </a>
+    <a class="quick-link-card" href="/how-counselling-works">
+      <span class="section-kicker">How it works</span>
+      <strong>Know what to expect before you attend</strong>
+      <span>Clear information about first sessions, confidentiality, practical details, and getting started.</span>
+    </a>
+    <a class="quick-link-card" href="/services">
+      <span class="section-kicker">Services</span>
+      <strong>See the kinds of support available</strong>
+      <span>Support for addiction, grief, anxiety, depression, relationships, confidence, bullying, supervision, and more.</span>
+    </a>
   </section>
 
-  <section class="mt-14 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-    <h2 class="text-2xl font-semibold tracking-tight text-slate-900">How to start</h2>
-    <ol class="mt-5 grid gap-4 md:grid-cols-3">
-      <li class="card">
-        <h3 class="text-lg font-semibold">Step 1</h3>
-        <p class="mt-2 text-slate-700">Reach out by phone or email.</p>
+  <section class="section-shell mt-14 px-6 py-8 md:px-8 md:py-10">
+    <div class="max-w-3xl">
+      <p class="section-kicker">What you can expect</p>
+      <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-900 md:text-3xl">A calm, practical first step</h2>
+      <p class="mt-4 text-slate-700">
+        Counselling can feel easier to approach when you know what kind of space you are stepping into.
+        The aim is not pressure. It is a steady, private conversation at a pace that feels manageable.
+      </p>
+    </div>
+
+    <div class="feature-grid mt-8">
+      <article class="feature-card">
+        <h3 class="text-lg font-semibold text-slate-900">You can start simply</h3>
+        <p class="mt-3 text-slate-700">A short phone call or email is enough to ask about availability. You do not need to have everything worked out first.</p>
+      </article>
+      <article class="feature-card">
+        <h3 class="text-lg font-semibold text-slate-900">A private, respectful space</h3>
+        <p class="mt-3 text-slate-700">Confidentiality is of the utmost importance to me when working with clients.</p>
+      </article>
+      <article class="feature-card">
+        <h3 class="text-lg font-semibold text-slate-900">Clear practical information</h3>
+        <p class="mt-3 text-slate-700">You can read about first sessions, cancellations, and practical expectations before you book.</p>
+      </article>
+      <article class="feature-card">
+        <h3 class="text-lg font-semibold text-slate-900">Support grounded in experience</h3>
+        <p class="mt-3 text-slate-700">Marie brings long private-practice experience, HSE experience, and a fully dedicated practice in Kanturk, Co. Cork.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section-shell mt-14 px-6 py-8 md:px-8 md:py-10">
+    <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+      <div class="max-w-3xl">
+        <p class="section-kicker">Trust and experience</p>
+        <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-900 md:text-3xl">A local practice with long experience</h2>
+        <p class="mt-4 text-slate-700">
+          Marie Harding Counselling Service is based at {practiceContact.addressLine1}, {practiceContact.addressLine2}.
+          The practice combines long private-practice experience, HSE experience, professional supervision work, and a clear emphasis on confidentiality.
+        </p>
+      </div>
+      <a class="btn-tertiary w-fit" href="/about-marie">Read about Marie</a>
+    </div>
+
+    <div class="metric-grid mt-8">
+      <article class="metric-card">
+        <p class="metric-value">{serviceSignals.privatePracticeYears}</p>
+        <p class="metric-label">Years in private practice</p>
+        <p class="metric-copy">Private practice since {serviceSignals.privatePracticeSince}.</p>
+      </article>
+      <article class="metric-card">
+        <p class="metric-value">{serviceSignals.hseYears}</p>
+        <p class="metric-label">Years with the HSE</p>
+        <p class="metric-copy">Marie worked with the HSE from {serviceSignals.hseExperience}.</p>
+      </article>
+      <article class="metric-card">
+        <p class="metric-value">NAPCP</p>
+        <p class="metric-label">Professional supervision</p>
+        <p class="metric-copy">{serviceSignals.supervision}.</p>
+      </article>
+      <article class="metric-card">
+        <p class="metric-value">2018</p>
+        <p class="metric-label">Dedicated local practice</p>
+        <p class="metric-copy">Full-time practice in Kanturk since {serviceSignals.fullTimeKanturkSince}.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section-shell mt-14 px-6 py-8 md:px-8 md:py-10">
+    <div class="max-w-3xl">
+      <p class="section-kicker">How to start</p>
+      <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-900 md:text-3xl">Three simple steps</h2>
+      <p class="mt-4 text-slate-700">
+        If you are considering counselling, it can help to know what the first step actually looks like.
+      </p>
+    </div>
+
+    <ol class="flow-grid mt-8">
+      <li class="flow-card">
+        <p class="flow-number">01</p>
+        <h3 class="mt-3 text-lg font-semibold text-slate-900">Reach out</h3>
+        <p class="mt-3 text-slate-700">Contact Marie by phone or email to ask about availability.</p>
       </li>
-      <li class="card">
-        <h3 class="text-lg font-semibold">Step 2</h3>
-        <p class="mt-2 text-slate-700">A short initial chat to see what you need and whether it feels like a fit.</p>
+      <li class="flow-card">
+        <p class="flow-number">02</p>
+        <h3 class="mt-3 text-lg font-semibold text-slate-900">A short initial chat</h3>
+        <p class="mt-3 text-slate-700">A brief conversation helps clarify what you need and whether the support feels like a fit.</p>
       </li>
-      <li class="card">
-        <h3 class="text-lg font-semibold">Step 3</h3>
-        <p class="mt-2 text-slate-700">Book a first session.</p>
+      <li class="flow-card">
+        <p class="flow-number">03</p>
+        <h3 class="mt-3 text-lg font-semibold text-slate-900">Book a first session</h3>
+        <p class="mt-3 text-slate-700">If it feels right to proceed, a first session can be arranged.</p>
       </li>
     </ol>
-    <p class="mt-5 text-slate-700">
-      Read more about the process on the
+
+    <p class="mt-6 text-slate-700">
+      If you would like a clearer picture first, the
       <a class="link-subtle" href="/how-counselling-works">How counselling works</a>
-      page.
+      page explains the process in more detail.
     </p>
   </section>
 
   <section class="mt-14">
     <div class="flex flex-wrap items-end justify-between gap-4">
-      <h2 class="text-2xl font-semibold tracking-tight text-slate-900">Services</h2>
+      <div class="max-w-3xl">
+        <p class="section-kicker">Services</p>
+        <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-900 md:text-3xl">Support available</h2>
+        <p class="mt-3 text-slate-700">
+          Many people are dealing with more than one difficulty at the same time. You do not need to choose the perfect heading before making contact.
+        </p>
+      </div>
       <a class="btn-tertiary" href="/services">View all services</a>
     </div>
     <div class="mt-6 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
@@ -78,10 +185,21 @@ const services = (await getCollection('services'))
     </div>
   </section>
 
-  <section class="mt-14 rounded-2xl border border-amber-200 bg-amber-50 p-6">
+  <section class="section-shell mt-14 px-6 py-8 md:px-8 md:py-10">
+    <div class="max-w-3xl">
+      <p class="section-kicker">Practical questions</p>
+      <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-900 md:text-3xl">Questions people often ask before getting in touch</h2>
+    </div>
+    <div class="mt-8">
+      <FAQAccordion items={homeFaqs} />
+    </div>
+  </section>
+
+  <section class="mt-14 rounded-[1.6rem] border border-amber-200 bg-amber-50 px-6 py-6">
     <h2 class="text-xl font-semibold text-amber-950">Important note</h2>
     <p class="mt-3 text-amber-900">
       This practice is not an emergency or crisis service. If you need urgent help, call 112 or 999. Samaritans freephone 116 123.
     </p>
   </section>
 </Layout>
+

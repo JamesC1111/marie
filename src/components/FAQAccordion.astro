@@ -1,4 +1,4 @@
-﻿---
+---
 interface FAQItem {
   question: string;
   answer: string;
@@ -13,7 +13,7 @@ const { items } = Astro.props;
 
 <div class="space-y-3">
   {items.map((item) => (
-    <details class="faq-item">
+    <details class="faq-item group">
       <summary class="faq-question">{item.question}</summary>
       <p class="faq-answer">{item.answer}</p>
     </details>

@@ -1,52 +1,231 @@
-﻿---
+---
 import { getCollection } from 'astro:content';
 
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import PageHeader from '../components/PageHeader.astro';
+import SupportPanel from '../components/SupportPanel.astro';
+import { localSupportLinks } from '../lib/site';
 import Layout from '../layouts/Layout.astro';
+
+const groupMeta = {
+  'urgent-help': {
+    title: 'Urgent help',
+    intro:
+      'These official supports may matter if you need urgent help now, or if you are worried about someone else.'
+  },
+  'general-support': {
+    title: 'General mental health support',
+    intro:
+      'A small set of trusted Irish organisations that offer information, signposting, and practical support.'
+  },
+  'youth-support': {
+    title: 'Young people',
+    intro:
+      'Supports that may help young people, parents, guardians, and other adults supporting them.'
+  },
+  'peer-support': {
+    title: 'Peer support',
+    intro:
+      'Group-based support can be helpful for some people, especially when it feels useful to hear from others with lived experience.'
+  },
+  'bereavement-support': {
+    title: 'Bereavement and suicide-related support',
+    intro:
+      'Careful, practical support options relating to bereavement, suicide bereavement, and urgent distress.'
+  },
+  'family-support': {
+    title: 'Family and supporter information',
+    intro:
+      'Information and support that may help if you are trying to support a relative, partner, child, or friend.'
+  }
+} as const;
+
+type GroupKey = keyof typeof groupMeta;
+
+const groupOrder: GroupKey[] = [
+  'urgent-help',
+  'general-support',
+  'youth-support',
+  'peer-support',
+  'bereavement-support',
+  'family-support'
+];
 
 const resources = (await getCollection('resources')).sort(
   (a, b) => a.data.order - b.data.order
 );
+
+const groupedResources = groupOrder
+  .map((group) => ({
+    group,
+    ...groupMeta[group],
+    items: resources.filter((resource) => resource.data.groups.includes(group))
+  }))
+  .filter((group) => group.items.length > 0);
+
+function getPhoneHref(phone: string) {
+  const primary = phone.split('/')[0]?.trim() ?? '';
+  const digits = primary.replace(/[^\d+]/g, '');
+
+  return digits ? `tel:${digits}` : null;
+}
+
+function getTextHref(text: string) {
+  const numberMatch = text.match(/(\d{5,})/);
+  const bodyMatch = text.match(/^([A-Za-z]+)\s+to\s+\d{5,}/);
+
+  if (!numberMatch) {
+    return null;
+  }
+
+  const body = bodyMatch?.[1];
+
+  return body
+    ? `sms:${numberMatch[1]}?body=${encodeURIComponent(body)}`
+    : `sms:${numberMatch[1]}`;
+}
 ---
 
 <Layout
-  title="Resources"
-  description="Useful Irish mental health resources and support information."
+  title="Support Resources | Marie Harding"
+  description="Official Irish and Cork-relevant support resources, including urgent help, youth support, bereavement information, and peer support."
   canonicalPath="/resources"
 >
   <div class="space-y-6">
     <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Resources' }]} />
     <PageHeader
-      title="Resources"
-      intro="A short list of trusted Irish supports and information sources."
+      title="Support resources"
+      intro="These official services may be useful alongside counselling, or when urgent, specialist, youth, family, or peer support is needed."
     />
   </div>
 
-  <section class="mt-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-    <p class="text-slate-700">
-      These links may be helpful for information and support.
-      They are not a substitute for emergency or crisis care.
-      If you need urgent help, call 112 or 999.
+  <section class="soft-panel mt-8 px-6 py-6 md:px-8">
+    <p class="text-slate-800">
+      This practice is not an emergency or crisis service. You do not need to use these supports instead of counselling,
+      but they may be helpful if you need urgent help, specialist information, or wider support.
     </p>
   </section>
 
-  <section class="mt-8 grid gap-5 md:grid-cols-2">
-    {resources.map((resource) => (
-      <article class="card h-full">
-        <p class="text-sm font-medium text-teal-800">{resource.data.organisation}</p>
-        <h2 class="mt-1 text-xl font-semibold text-slate-900">{resource.data.title}</h2>
-        <p class="mt-3 text-slate-700">{resource.data.summary}</p>
-        <p class="mt-3 text-slate-700">{resource.body}</p>
-        <a
-          class="mt-4 inline-flex text-sm font-semibold text-teal-800 underline-offset-2 hover:underline"
-          href={resource.data.url}
-          rel="noreferrer"
-          target="_blank"
-        >
-          Visit website
-        </a>
-      </article>
-    ))}
+  <section class="section-shell mt-10 px-6 py-8 md:px-8 md:py-10">
+    <div class="max-w-3xl">
+      <p class="section-kicker">Local and national supports</p>
+      <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-900 md:text-3xl">Cork-relevant starting points</h2>
+      <p class="mt-4 text-slate-700">
+        If you are in or around Kanturk, Co. Cork, these may be useful local starting points alongside the wider national supports below.
+      </p>
+    </div>
+
+    <div class="quick-link-grid mt-8">
+      <a class="quick-link-card" href={localSupportLinks.jigsawCork.href} rel="noreferrer" target="_blank">
+        <span class="section-kicker">Young people</span>
+        <strong>Jigsaw Cork</strong>
+        <span>{localSupportLinks.jigsawCork.note}</span>
+      </a>
+      <a class="quick-link-card" href={localSupportLinks.corkSamaritans.href} rel="noreferrer" target="_blank">
+        <span class="section-kicker">Urgent support</span>
+        <strong>Cork Samaritans branch</strong>
+        <span>{localSupportLinks.corkSamaritans.note}</span>
+      </a>
+      <a class="quick-link-card" href={localSupportLinks.growCork.href} rel="noreferrer" target="_blank">
+        <span class="section-kicker">Peer support</span>
+        <strong>Grow Cork support groups</strong>
+        <span>{localSupportLinks.growCork.note}</span>
+      </a>
+    </div>
   </section>
+
+  {groupedResources.map((group) => (
+    <section class="mt-14">
+      <div class="max-w-3xl">
+        <p class="section-kicker">Official support services</p>
+        <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-900 md:text-3xl">{group.title}</h2>
+        <p class="mt-3 text-slate-700">{group.intro}</p>
+      </div>
+
+      <div class="resource-grid mt-8">
+        {group.items.map((resource) => {
+          const phoneHref = resource.data.phone ? getPhoneHref(resource.data.phone) : null;
+          const textHref = resource.data.text ? getTextHref(resource.data.text) : null;
+
+          return (
+            <article class="resource-card">
+              <p class="section-kicker text-[0.72rem]">{resource.data.organisation}</p>
+              <h3 class="mt-2 text-xl font-semibold text-slate-900">{resource.data.title}</h3>
+              <p class="mt-3 text-slate-700">{resource.data.summary}</p>
+
+              {resource.data.forWho && (
+                <p class="mt-4 text-sm leading-relaxed text-slate-600">
+                  <strong class="font-semibold text-slate-800">May be useful for:</strong> {resource.data.forWho}
+                </p>
+              )}
+
+              {(resource.data.phone || resource.data.text || resource.data.email) && (
+                <dl class="resource-details mt-5">
+                  {resource.data.phone && (
+                    <div>
+                      <dt>Phone</dt>
+                      <dd>
+                        {phoneHref ? (
+                          <a class="link-subtle" href={phoneHref}>{resource.data.phone}</a>
+                        ) : (
+                          <span>{resource.data.phone}</span>
+                        )}
+                      </dd>
+                    </div>
+                  )}
+                  {resource.data.text && (
+                    <div>
+                      <dt>Text</dt>
+                      <dd>
+                        {textHref ? (
+                          <a class="link-subtle" href={textHref}>{resource.data.text}</a>
+                        ) : (
+                          <span>{resource.data.text}</span>
+                        )}
+                      </dd>
+                    </div>
+                  )}
+                  {resource.data.email && (
+                    <div>
+                      <dt>Email</dt>
+                      <dd>
+                        <a class="link-subtle" href={`mailto:${resource.data.email}`}>{resource.data.email}</a>
+                      </dd>
+                    </div>
+                  )}
+                </dl>
+              )}
+
+              {resource.data.localNote && (
+                <p class="resource-note mt-5">
+                  <strong class="font-semibold text-slate-900">Local note:</strong> {resource.data.localNote}
+                </p>
+              )}
+
+              <div class="mt-6 flex flex-wrap gap-3">
+                <a
+                  class="btn-secondary"
+                  href={resource.data.url}
+                  rel="noreferrer"
+                  target="_blank"
+                  aria-label={`Visit the official ${resource.data.organisation} website`}
+                >
+                  Visit official website
+                </a>
+                {phoneHref && (
+                  <a class="btn-tertiary" href={phoneHref}>
+                    Call
+                  </a>
+                )}
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+  ))}
+
+  <div class="mt-14">
+    <SupportPanel intro="If you need urgent help, or if you are looking for wider support alongside counselling, these official services may be a useful starting point." />
+  </div>
 </Layout>

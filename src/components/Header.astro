@@ -1,4 +1,4 @@
-﻿---
+---
 import { navLinks, practiceContact } from '../lib/site';
 
 const currentPath = Astro.url.pathname;
@@ -19,8 +19,8 @@ function isCurrent(href: string) {
         <span class="brand__name">Marie Harding Counselling Service</span>
         <span class="brand__place">Kanturk, Co. Cork</span>
       </a>
-      <a class="hidden text-sm font-medium text-slate-700 hover:text-slate-900 md:inline" href={`tel:+353872503743`}>
-        {practiceContact.phoneDisplay}
+      <a class="header-call hidden md:inline-flex" href={`tel:+353872503743`}>
+        Call {practiceContact.phoneDisplay}
       </a>
     </div>
 

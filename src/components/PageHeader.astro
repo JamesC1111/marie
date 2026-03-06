@@ -1,4 +1,4 @@
-﻿---
+---
 interface Props {
   title: string;
   intro?: string;
@@ -7,7 +7,8 @@ interface Props {
 const { title, intro } = Astro.props;
 ---
 
-<header class="border-b border-slate-200 pb-6">
-  <h1 class="text-balance text-3xl font-semibold tracking-tight text-slate-900 md:text-4xl">{title}</h1>
-  {intro && <p class="mt-4 max-w-3xl text-lg leading-relaxed text-slate-700">{intro}</p>}
+<header class="page-header border-b border-slate-200/80 pb-7">
+  <p class="section-kicker">Marie Harding Counselling Service</p>
+  <h1 class="mt-2 max-w-4xl text-balance text-3xl font-semibold tracking-tight text-slate-900 md:text-4xl">{title}</h1>
+  {intro && <p class="page-lead mt-4 max-w-3xl text-lg leading-relaxed text-slate-700">{intro}</p>}
 </header>

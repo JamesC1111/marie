@@ -1,48 +1,45 @@
-﻿---
+---
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import FAQAccordion from '../components/FAQAccordion.astro';
 import PageHeader from '../components/PageHeader.astro';
+import SupportPanel from '../components/SupportPanel.astro';
 import Layout from '../layouts/Layout.astro';
 
 const faqs = [
-  {
-    question: 'How long is a session?',
-    answer: 'Sessions are usually around 50 minutes. If you need a different format, please ask.'
-  },
-  {
-    question: 'Do you offer online sessions?',
-    answer: 'Please ask when you make contact. Availability can depend on your needs and schedule.'
-  },
-  {
-    question: 'What happens in the first session?',
-    answer: 'We talk about what brought you in, what support you are looking for, and how we might work together.'
-  },
-  {
-    question: 'Is what I say confidential?',
-    answer: 'Confidentiality is taken very seriously. If there are legal or safety limits, they are explained clearly at the start.'
-  },
-  {
-    question: 'How do cancellations work?',
-    answer: 'Please give as much notice as possible. Full cancellation details are on the Fees and cancellations page.'
-  },
-  {
-    question: 'Do you work with teenagers?',
-    answer: 'Yes, support for children and young people is available. Please ask about age suitability.'
-  },
   {
     question: 'Do I need a referral?',
     answer: 'No referral is required. You can contact Marie directly.'
   },
   {
-    question: 'Do you accept medical cards?',
-    answer: 'Please ask when making contact.'
+    question: 'How long is a session?',
+    answer: 'Sessions are usually around 50 minutes. If you need a different format, please ask.'
+  },
+  {
+    question: 'Do you offer online appointments?',
+    answer: 'In-person sessions are available in Kanturk, Co. Cork. If online appointments would suit you better, please ask when you get in touch.'
+  },
+  {
+    question: 'Is what I say confidential?',
+    answer: 'Confidentiality is taken very seriously. Any limits are explained clearly at the start so you know where you stand.'
+  },
+  {
+    question: 'Do you work with teenagers?',
+    answer: 'Support for children and young people is available. Please ask about age suitability and what kind of support may be most appropriate.'
+  },
+  {
+    question: 'What if I am nervous about the first session?',
+    answer: 'That is very common. You are not expected to explain everything at once. The first session is simply a starting point.'
+  },
+  {
+    question: 'How do I cancel or rearrange?',
+    answer: 'Please give as much notice as possible if you need to cancel or move an appointment. Full practical details are on the Fees and cancellations page.'
   }
 ];
 ---
 
 <Layout
-  title="How counselling works"
-  description="A clear step-by-step guide to starting counselling with Marie Harding in Kanturk, Co. Cork."
+  title="How Counselling Works | Marie Harding"
+  description="A clear guide to starting counselling with Marie Harding in Kanturk, Co. Cork, including first sessions, confidentiality, online options, and practical details."
   canonicalPath="/how-counselling-works"
 >
   <div class="space-y-6">
@@ -54,48 +51,137 @@ const faqs = [
     />
     <PageHeader
       title="How counselling works"
-      intro="Counselling should feel clear and manageable. Here is what to expect from first contact to ongoing sessions."
+      intro="Counselling should feel clear and manageable. This page explains what happens before the first session, what sessions are like, and the practical details people often want to know."
     />
   </div>
 
-  <section class="mt-8 grid gap-4 md:grid-cols-3">
-    <article class="card">
-      <h2 class="text-xl font-semibold">1. Reach out</h2>
-      <p class="mt-3 text-slate-700">You can contact me by phone or email to ask about availability and appointment times.</p>
+  <section class="soft-panel mt-8 px-6 py-6 md:px-8">
+    <p class="text-lg text-slate-800">
+      You do not need to know exactly what to say before you make contact. A few lines, or a simple phone call to ask about availability, is enough to begin.
+    </p>
+  </section>
+
+  <section class="feature-grid mt-8 xl:grid-cols-4">
+    <article class="feature-card">
+      <p class="section-kicker">Before you attend</p>
+      <h2 class="mt-2 text-xl font-semibold text-slate-900">First contact</h2>
+      <p class="mt-3 text-slate-700">You can get in touch by phone or email to ask about availability, timing, and whether the support feels suitable for you.</p>
     </article>
-    <article class="card">
-      <h2 class="text-xl font-semibold">2. Short initial chat</h2>
-      <p class="mt-3 text-slate-700">We have a short conversation about what support you need and whether this feels like the right fit.</p>
+    <article class="feature-card">
+      <p class="section-kicker">The first appointment</p>
+      <h2 class="mt-2 text-xl font-semibold text-slate-900">A calm starting point</h2>
+      <p class="mt-3 text-slate-700">The first session is a chance to talk through what has brought you in, what you need, and how support may begin.</p>
     </article>
-    <article class="card">
-      <h2 class="text-xl font-semibold">3. First session</h2>
-      <p class="mt-3 text-slate-700">In the first session we discuss your goals, immediate concerns, and what ongoing support may look like.</p>
+    <article class="feature-card">
+      <p class="section-kicker">Ongoing sessions</p>
+      <h2 class="mt-2 text-xl font-semibold text-slate-900">Clear and practical</h2>
+      <p class="mt-3 text-slate-700">Sessions can stay focused on what matters most to you, with space to review what is helping and what needs attention next.</p>
+    </article>
+    <article class="feature-card">
+      <p class="section-kicker">Practical details</p>
+      <h2 class="mt-2 text-xl font-semibold text-slate-900">No hidden uncertainty</h2>
+      <p class="mt-3 text-slate-700">You can ask about format, timing, cancellations, and any practical concern before you commit to ongoing work.</p>
     </article>
   </section>
 
-  <article class="prose-safe mt-10">
-    <h2>What sessions are like</h2>
-    <p>
-      Sessions are a private, one-to-one space. You set the pace. We focus on what matters most to you, with clear and practical support.
-    </p>
+  <section class="service-layout mt-12 lg:grid-cols-[minmax(0,1fr)_18rem]">
+    <article class="prose-safe">
+      <h2>What happens before the first session</h2>
+      <p>
+        When you get in touch, the first step is usually a short conversation about what kind of support you are looking for,
+        what times may suit, and whether the service feels like the right fit.
+      </p>
+      <p>
+        You are welcome to keep that first contact simple. You do not need to tell your full story straight away.
+      </p>
 
-    <h2>Confidentiality</h2>
-    <p>
-      Confidentiality is of the utmost importance to me when working with clients.
-      Any limits to confidentiality are explained clearly so you know where you stand.
-    </p>
+      <h2>What the first session is like</h2>
+      <p>
+        The first session is a starting point rather than a test. We talk about what has brought you in,
+        what feels most important right now, and what you hope counselling may provide.
+      </p>
+      <p>
+        Some people arrive knowing exactly what they want to discuss. Others feel unsure or find it hard to put things into words at first.
+        Both are completely normal.
+      </p>
 
-    <h2>Emergency care</h2>
-    <p>
-      This practice is not an emergency or crisis service.
-      If you need urgent help, call 112 or 999. Samaritans freephone 116 123.
-    </p>
-  </article>
+      <h2>Confidentiality and its limits</h2>
+      <p>
+        Confidentiality is of the utmost importance to me when working with clients.
+        If there are any legal or safety-related limits to confidentiality, these are explained clearly at the start so you know where you stand.
+      </p>
 
-  <section class="mt-12">
-    <h2 class="text-2xl font-semibold tracking-tight text-slate-900">Frequently asked questions</h2>
-    <div class="mt-5">
+      <h2>In-person and online options</h2>
+      <p>
+        In-person sessions are available in Kanturk, Co. Cork.
+        If online appointments would suit you better, please ask when you get in touch.
+      </p>
+
+      <h2>How often sessions may happen</h2>
+      <p>
+        Session timing can be discussed together.
+        Some people prefer regular appointments, while others need more space between sessions.
+        What matters is choosing a rhythm that feels realistic and supportive.
+      </p>
+
+      <h2>Cancellations and practical expectations</h2>
+      <p>
+        If you need to cancel or rearrange, please give as much notice as possible.
+        Full practical details are on the <a href="/fees-and-cancellations">Fees and cancellations</a> page,
+        and anything unclear can be discussed before booking.
+      </p>
+
+      <h2>If you are nervous about attending</h2>
+      <p>
+        Many people feel uneasy before a first session, especially if counselling is new to them.
+        You are not expected to say everything perfectly, and there is no pressure to cover everything at once.
+      </p>
+      <p>
+        The aim is to create a calm space where it feels easier to begin.
+      </p>
+
+      <h2>Emergency care</h2>
+      <p>
+        This practice is not an emergency or crisis service.
+        If you need urgent help, call 112 or 999. Samaritans freephone 116 123.
+      </p>
+    </article>
+
+    <aside class="service-sidebar space-y-4">
+      <section class="soft-panel">
+        <p class="section-kicker">At a glance</p>
+        <ul class="mini-list mt-4">
+          <li>First contact can be by phone or email.</li>
+          <li>The first session is a calm starting point.</li>
+          <li>Confidentiality is taken very seriously.</li>
+          <li>In-person sessions are available in Kanturk, Co. Cork.</li>
+          <li>Please ask if online appointments would suit you better.</li>
+        </ul>
+      </section>
+
+      <section class="soft-panel">
+        <p class="section-kicker">Useful next steps</p>
+        <div class="mt-4 flex flex-col gap-3 text-sm font-medium">
+          <a class="link-subtle" href="/contact">Request an appointment</a>
+          <a class="link-subtle" href="/fees-and-cancellations">Fees and cancellations</a>
+          <a class="link-subtle" href="/about-marie">About Marie</a>
+          <a class="link-subtle" href="/resources">Support resources</a>
+        </div>
+      </section>
+    </aside>
+  </section>
+
+  <section class="section-shell mt-14 px-6 py-8 md:px-8 md:py-10">
+    <div class="max-w-3xl">
+      <p class="section-kicker">Frequently asked questions</p>
+      <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-900 md:text-3xl">Practical questions, answered clearly</h2>
+    </div>
+    <div class="mt-8">
       <FAQAccordion items={faqs} />
     </div>
   </section>
+
+  <div class="mt-14">
+    <SupportPanel intro="If you need urgent help, or if you would find additional support useful alongside counselling, these official services may help." />
+  </div>
 </Layout>

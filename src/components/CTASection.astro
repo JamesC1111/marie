@@ -1,4 +1,4 @@
-﻿---
+---
 import { ctaLinks, practiceContact } from '../lib/site';
 import Icon from './Icon.astro';
 
@@ -9,12 +9,13 @@ interface Props {
 
 const {
   title = 'If you would like to ask about availability, you can contact me by phone or email.',
-  intro = 'You are welcome to make contact in whichever way feels easiest for you.'
+  intro = 'A short message is enough. You are welcome to make contact in whichever way feels easiest for you.'
 } = Astro.props;
 ---
 
-<section class="rounded-2xl border border-slate-200 bg-white px-6 py-7 shadow-sm">
-  <h2 class="text-2xl font-semibold tracking-tight text-slate-900">{title}</h2>
+<section class="section-shell px-6 py-7 md:px-8 md:py-8">
+  <p class="section-kicker">Make contact</p>
+  <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-900">{title}</h2>
   <p class="mt-3 max-w-3xl text-slate-700">{intro}</p>
   <div class="mt-5 flex flex-wrap gap-3">
     <a class="btn-primary inline-flex items-center gap-2" href={ctaLinks.call}>
