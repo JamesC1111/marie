@@ -77,12 +77,23 @@
 - [x] Expand deployment and launch documentation for Render, DNS, SSL, and Blacknight.
 - [x] Re-run build, test, health checks, lint, and Lighthouse after hardening.
 
+### 10. Support resources + local trust pass
+
+- [x] Restructure `resources` content around official Irish and Cork-relevant support groups.
+- [x] Add official support entries for urgent help, general support, youth support, peer support, bereavement, and family/supporter information.
+- [x] Improve urgent-help presentation in the footer and reusable support panels.
+- [x] Link the resources layer from contact, how counselling works, footer, and service pages.
+- [x] Add local framing for Cork supports without using spammy SEO or fake backlink tactics.
+- [x] Expand handover documentation with support-link editing guidance and local trust footprint notes.
+- [x] Re-run install, build, test, lint, and health checks after the update.
+
 ## Assumptions Log
 
 - [x] Canonical domain is `https://www.mariehardingcounselling.ie`.
 - [x] Exact fee amounts, online-session availability, and medical card acceptance remain intentionally unconfirmed.
 - [x] SMTP environment variables are the supported email delivery method.
 - [x] Only the live `www` host should be indexable; local, preview, and Render default hosts should remain blocked from indexing.
+- [x] Official support resources should stay factual, external, and clearly separate from Marie's counselling service.
 
 ## Final QA Checklist (repo and pre-launch)
 
@@ -101,3 +112,4 @@
 - [x] Lighthouse scores are strong for Home, Services, and Contact in local launch checks.
 - [x] Weekly CI health workflow runs and reports correctly.
 - [x] Documentation is clear for non-developers.
+- [x] Resources page lists official supports and local Cork context without clutter or keyword stuffing.

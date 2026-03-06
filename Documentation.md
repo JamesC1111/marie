@@ -8,6 +8,7 @@ It includes:
 
 - a calm, mobile-first front end
 - markdown-driven services and resources content
+- an official Irish and Cork-relevant support resources layer
 - a server-side contact form that sends to email and does not store enquiries in a database
 - host-aware indexing safety for Render preview/default hosts
 - Render deployment support and launch documentation
@@ -18,6 +19,7 @@ It includes:
 - Mobile-first counselling website with calm, accessible design.
 - Shared layout, reusable components, and content collections for easy editing.
 - Contact page with click-to-call, tap-to-email, map embed, and protected email form.
+- Support resources page with official Irish services, local Cork framing, and reusable urgent-help panels.
 - Legal pages, accessibility statement, sitemap, dynamic `robots.txt`, `404`, and OG image.
 - Optional privacy-respecting analytics, defaulted off.
 - Dedicated `/healthz` endpoint for Render health checks.
@@ -58,6 +60,22 @@ When editing:
 - Do not add medical claims or guaranteed outcomes.
 - Do not change crisis wording casually.
 - Do not change protected counselling copy without human review. See `AGENTS.md`.
+
+### Editing support links
+
+The support resources layer is intentionally simple:
+
+- one markdown file per organisation in `src/content/resources`
+- grouping is controlled by the `groups` array in each file
+- contact and local-support quick links are centralised in `src/lib/site.ts`
+
+When updating support entries:
+
+- use official organisation links only
+- keep summaries short, factual, and non-alarmist
+- keep local notes factual
+- do not add referral schemes, affiliate links, or unofficial directories
+- check phone numbers, text numbers, and emails against the official site before publishing
 
 ## Contact Form Email Setup
 
@@ -279,6 +297,74 @@ Checklist:
 - [ ] Confirm the homepage, services, and contact page all load correctly on mobile.
 - [ ] Confirm the contact bar works on a phone.
 - [ ] Confirm the site loads over HTTPS without certificate warnings.
+
+## Support Resources Maintenance
+
+Use this when reviewing or updating the support-resources layer.
+
+### Current support structure
+
+- Urgent help
+- General mental health support
+- Young people
+- Peer support
+- Bereavement and suicide-related support
+- Family and supporter information
+
+### Safe editing process
+
+1. Open the relevant markdown file in `src/content/resources`.
+2. Update the official URL, summary, or contact details only after checking the source organisation.
+3. Keep summaries practical and calm.
+4. Run:
+   - `npm run build`
+   - `npm run test`
+   - `npm run check:health`
+5. Review the Resources page locally on mobile and desktop.
+
+### External links currently included
+
+- Aware
+- Grow Mental Health
+- Samaritans Ireland
+- Pieta
+- HSE urgent mental health help
+- HSE Your Mental Health information line
+- Jigsaw Cork
+- Shine
+- HSE National Counselling Service
+- Irish Hospice Foundation bereavement support
+
+## Local Trust Footprint
+
+The goal is not backlink building. The goal is consistency, trust, and accurate local information.
+
+Maintain these real profiles and citations with the same name, address, phone, website, and service wording as the live site:
+
+- Google Business Profile
+- Marie's main Facebook page
+- NAPCP listing
+- any other real professional or community listing already associated with Marie
+
+Guidelines:
+
+- use the live canonical website URL
+- keep the business name exactly consistent
+- keep address and phone formatting consistent
+- keep service descriptions calm and factual
+- do not use backlink schemes, directory spam, bought listings, or link exchanges
+
+## Domain Approval Note
+
+Domain approval does not block content, design, or support-resource work.
+
+Once the domain is approved, the final live checks are:
+
+- DNS records
+- SSL
+- canonical host verification
+- Search Console setup
+- live contact-form test
 
 ## VS Code And Local Folder Use
 

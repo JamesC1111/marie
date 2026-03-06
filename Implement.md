@@ -53,6 +53,41 @@
 - Updated `run-lighthouse.mjs` so local audits exercise the canonical host name without weakening non-production indexing safeguards.
 - Added tests for host detection and contact delivery environment handling.
 
+### 2026-03-06 Support resources + local trust pass
+
+- Reworked the resources content collection so support entries can appear under more than one practical group:
+  - urgent help
+  - general support
+  - youth support
+  - peer support
+  - bereavement support
+  - family/supporter information
+- Replaced the earlier generic resources set with official Irish and Cork-relevant supports:
+  - Aware
+  - Grow Mental Health
+  - Samaritans Ireland
+  - Pieta
+  - HSE urgent mental health help
+  - HSE Your Mental Health information line
+  - Jigsaw Cork
+  - Shine
+  - HSE National Counselling Service
+  - Irish Hospice Foundation bereavement support
+- Rebuilt `src/pages/resources.astro` so it now reads as a curated support guide rather than a plain link list:
+  - grouped sections
+  - clear summaries
+  - phone/text/email details where appropriate
+  - Cork-specific framing without clutter
+- Added `src/components/SupportPanel.astro` and reused it on:
+  - contact page
+  - how counselling works page
+  - service detail pages
+  - resources page
+- Expanded the footer urgent-help area with clearer quick links for emergency services, Samaritans, Pieta, HSE urgent help, Cork Samaritans, and Jigsaw Cork.
+- Added shared `urgentSupportLinks` and `localSupportLinks` constants in `src/lib/site.ts` so urgent-help and local-support details stay consistent.
+- Removed duplicate page-level CTA sections from the services hub and service detail pages because `Layout.astro` already renders the shared CTA.
+- Kept support resources clearly framed as additional or urgent supports, not as replacements for Marie's counselling service.
+
 ## Commands Used
 
 - `npm create astro@latest`
@@ -63,6 +98,7 @@
 - `npm run test`
 - `npm run check:health`
 - `npm run lighthouse`
+- `npm run format:write`
 
 ## Assumptions
 
@@ -71,3 +107,4 @@
 - Assumption: the contact form should use SMTP credentials supplied through environment variables rather than a third-party hosted form backend.
 - Assumption: local preview, Render preview hosts, and the Render default hostname should not be indexable even though they serve the same content.
 - Assumption: local Lighthouse checks need to adjust HTTPS-only best-practice audits because TLS is terminated at the production host, not in the local preview server.
+- Assumption: official support resources may change over time, so organisations, phone numbers, and URLs should be checked against the source sites during future content reviews.

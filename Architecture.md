@@ -6,6 +6,7 @@
 - Local checks in place: `format`, `lint`, `test`, `build`, `check:health`, `lighthouse`, `audit`.
 - GitHub Actions runs weekly site-health reporting.
 - Launch hardening added for Render, custom-domain safety, and contact-form resilience.
+- Support resources layer added with official Irish and Cork-relevant support listings plus reusable urgent-help panels.
 
 ## Stack Choice
 
@@ -72,8 +73,20 @@ Frontmatter fields:
 - `url`
 - `summary`
 - `order`
+- `groups`
+- `forWho` (optional)
+- `phone` (optional)
+- `text` (optional)
+- `email` (optional)
+- `localNote` (optional)
 
 Body supports optional context and usage notes.
+
+Authoring convention:
+
+- keep to official organisations only
+- group entries under practical support types such as urgent help, youth support, peer support, and family/supporter information
+- use short, factual summaries rather than promotional copy
 
 ## Shared Components
 
@@ -85,6 +98,7 @@ Body supports optional context and usage notes.
 - `FAQAccordion` for practical FAQs using `details/summary`.
 - `CTASection` for gentle contact prompts.
 - `ContactBar` sticky mobile call and email actions.
+- `SupportPanel` for reusable urgent-help and additional-support guidance on contact, process, service, and resources pages.
 
 ## SEO, Canonical, And Host Safety
 
