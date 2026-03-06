@@ -38,7 +38,40 @@ const resources = defineCollection({
   }),
 });
 
+const guides = defineCollection({
+  type: "content",
+  schema: z.object({
+    title: z.string(),
+    summary: z.string(),
+    metaTitle: z.string(),
+    metaDescription: z.string(),
+    published: z.date(),
+    updated: z.date().optional(),
+    order: z.number(),
+    category: z.string(),
+    tags: z.array(z.string()),
+    featured: z.boolean().default(false),
+  }),
+});
+
+const insights = defineCollection({
+  type: "content",
+  schema: z.object({
+    title: z.string(),
+    summary: z.string(),
+    metaTitle: z.string(),
+    metaDescription: z.string(),
+    published: z.date(),
+    updated: z.date().optional(),
+    category: z.string(),
+    tags: z.array(z.string()),
+    featured: z.boolean().default(false),
+  }),
+});
+
 export const collections = {
   services,
   resources,
+  guides,
+  insights,
 };

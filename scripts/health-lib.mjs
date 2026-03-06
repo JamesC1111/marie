@@ -20,6 +20,9 @@ const STATIC_ROUTES = [
   "/services",
   "/fees-and-cancellations",
   "/resources",
+  "/guides",
+  "/insights",
+  "/faq",
   "/contact",
   "/privacy-policy",
   "/terms-of-use",
@@ -80,13 +83,24 @@ async function waitForServer(url, child, timeoutMs = 30000) {
 
 export async function getRoutes() {
   const servicesDir = path.join(ROOT, "src", "content", "services");
-  const files = await readdir(servicesDir);
-  const serviceRoutes = files
-    .filter((file) => /\.(md|mdx)$/.test(file))
-    .sort()
-    .map((file) => `/services/${file.replace(/\.(md|mdx)$/, "")}`);
+  const guidesDir = path.join(ROOT, "src", "content", "guides");
+  const insightsDir = path.join(ROOT, "src", "content", "insights");
+  const [serviceFiles, guideFiles, insightFiles] = await Promise.all([
+    readdir(servicesDir),
+    readdir(guidesDir).catch(() => []),
+    readdir(insightsDir).catch(() => []),
+  ]);
+  const toRoutes = (collection, files) =>
+    files
+      .filter((file) => /\.(md|mdx)$/.test(file))
+      .sort()
+      .map((file) => `/${collection}/${file.replace(/\.(md|mdx)$/, "")}`);
 
-  return [...STATIC_ROUTES, ...serviceRoutes];
+  const guideRoutes = toRoutes("guides", guideFiles);
+  const insightRoutes = toRoutes("insights", insightFiles);
+  const serviceRoutes = toRoutes("services", serviceFiles);
+
+  return [...STATIC_ROUTES, ...serviceRoutes, ...guideRoutes, ...insightRoutes];
 }
 
 export async function fetchPage(route, customBaseUrl = baseUrl) {

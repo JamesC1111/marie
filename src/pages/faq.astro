@@ -1,0 +1,78 @@
+---
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import FAQAccordion from "../components/FAQAccordion.astro";
+import PageHeader from "../components/PageHeader.astro";
+import Layout from "../layouts/Layout.astro";
+import { practicalFaqs } from "../lib/faqs";
+import { faqSchema } from "../lib/schema";
+---
+
+<Layout
+  title="Frequently asked questions | Marie Harding"
+  description="Practical counselling questions answered clearly, including referrals, sessions, confidentiality, online options, and cancellations."
+  canonicalPath="/faq"
+  schema={[faqSchema(practicalFaqs)]}
+>
+  <div class="space-y-6">
+    <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "FAQ" }]} />
+    <PageHeader
+      title="Frequently asked questions"
+      intro="A clear, practical guide to the questions people often ask before making contact or attending a first session."
+    />
+  </div>
+
+  <section class="section-shell mt-8 px-6 py-8 md:px-8 md:py-10">
+    <div class="max-w-3xl">
+      <p class="section-kicker">Clear information</p>
+      <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-900 md:text-3xl">
+        Short answers to practical questions
+      </h2>
+      <p class="mt-4 text-slate-700">
+        If you do not see your question here, you can still get in touch. A
+        short call or email is enough.
+      </p>
+    </div>
+    <div class="mt-8">
+      <FAQAccordion items={practicalFaqs} />
+    </div>
+  </section>
+
+  <section class="feature-grid mt-14">
+    <article class="feature-card">
+      <p class="section-kicker">Getting started</p>
+      <h2 class="mt-2 text-xl font-semibold text-slate-900">
+        You can keep it simple
+      </h2>
+      <p class="mt-3 text-slate-700">
+        You do not need to know exactly what to say before you make contact.
+        Asking about availability is enough.
+      </p>
+    </article>
+    <article class="feature-card">
+      <p class="section-kicker">What happens next</p>
+      <h2 class="mt-2 text-xl font-semibold text-slate-900">
+        Read the process first
+      </h2>
+      <p class="mt-3 text-slate-700">
+        The How counselling works page explains first sessions,
+        confidentiality, practical expectations, and how to begin.
+      </p>
+      <a class="link-subtle mt-4 inline-flex" href="/how-counselling-works">
+        How counselling works
+      </a>
+    </article>
+    <article class="feature-card">
+      <p class="section-kicker">Need support now?</p>
+      <h2 class="mt-2 text-xl font-semibold text-slate-900">
+        Use the support resources page
+      </h2>
+      <p class="mt-3 text-slate-700">
+        If you need urgent or additional support, the Resources page lists
+        official Irish and Cork-relevant services.
+      </p>
+      <a class="link-subtle mt-4 inline-flex" href="/resources">
+        Support resources
+      </a>
+    </article>
+  </section>
+</Layout>

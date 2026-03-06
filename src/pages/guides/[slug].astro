@@ -1,0 +1,169 @@
+---
+import { getCollection, render } from "astro:content";
+
+import ArticleCard from "../../components/ArticleCard.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import TagList from "../../components/TagList.astro";
+import Layout from "../../layouts/Layout.astro";
+import {
+  formatArticleDate,
+  getReadingTime,
+  getRelatedArticles,
+} from "../../lib/articles";
+import { getEntrySlug } from "../../lib/content";
+import { articleSchema } from "../../lib/schema";
+
+const guides = await getCollection("guides");
+const insights = await getCollection("insights");
+const currentSlug = Astro.params.slug ?? "";
+const guide = guides.find((entry) => getEntrySlug(entry.id) === currentSlug);
+
+if (!guide) {
+  Astro.response.status = 404;
+}
+
+const renderedGuide = guide ? await render(guide) : null;
+const Content = renderedGuide?.Content;
+
+const relatedGuides = guide
+  ? getRelatedArticles(guides, guide.id, guide.data.tags)
+  : [];
+const relatedInsights = guide
+  ? getRelatedArticles(insights, "", guide.data.tags).slice(0, 2)
+  : [];
+---
+
+<Layout
+  title={guide?.data.metaTitle ?? "Guide not found"}
+  description={
+    guide?.data.metaDescription ??
+    "The guide you were looking for is not available."
+  }
+  canonicalPath={guide ? `/guides/${getEntrySlug(guide.id)}` : Astro.url.pathname}
+  schema={
+    guide
+      ? [
+          articleSchema({
+            headline: guide.data.title,
+            description: guide.data.metaDescription,
+            url: new URL(
+              `/guides/${getEntrySlug(guide.id)}`,
+              "https://www.mariehardingcounselling.ie",
+            ).toString(),
+            published: guide.data.published,
+            updated: guide.data.updated,
+            keywords: guide.data.tags,
+          }),
+        ]
+      : []
+  }
+>
+  {guide && Content ? (
+    <>
+      <div class="space-y-6">
+        <Breadcrumbs
+          items={[
+            { label: "Home", href: "/" },
+            { label: "Guides", href: "/guides" },
+            { label: guide.data.title },
+          ]}
+        />
+        <header class="page-header">
+          <p class="section-kicker">{guide.data.category}</p>
+          <h1 class="mt-2 text-4xl font-semibold tracking-tight text-slate-950 md:text-5xl">
+            {guide.data.title}
+          </h1>
+          <p class="page-lead mt-4 text-lg">
+            {guide.data.summary}
+          </p>
+          <div class="article-meta mt-5">
+            <span>{formatArticleDate(guide.data.published)}</span>
+            <span>{getReadingTime(guide.body)} min read</span>
+          </div>
+          <div class="mt-4">
+            <TagList tags={guide.data.tags} />
+          </div>
+        </header>
+      </div>
+
+      <section class="article-layout mt-10">
+        <article class="prose-safe article-prose">
+          <Content />
+        </article>
+
+        <aside class="article-sidebar space-y-4">
+          <section class="soft-panel">
+            <p class="section-kicker">Continue reading</p>
+            <div class="mt-4 flex flex-col gap-3 text-sm font-medium">
+              <a class="link-subtle" href="/contact" data-speculate="intent">
+                Request appointment
+              </a>
+              <a class="link-subtle" href="/how-counselling-works" data-speculate="intent">
+                How counselling works
+              </a>
+              <a class="link-subtle" href="/faq">Practical FAQs</a>
+            </div>
+          </section>
+        </aside>
+      </section>
+
+      {relatedGuides.length > 0 && (
+        <section class="mt-14">
+          <div class="max-w-3xl">
+            <p class="section-kicker">Related guides</p>
+            <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-900 md:text-3xl">
+              You may also want to read
+            </h2>
+          </div>
+          <div class="article-grid mt-8">
+            {relatedGuides.map((entry) => (
+              <ArticleCard
+                title={entry.data.title}
+                summary={entry.data.summary}
+                href={`/guides/${getEntrySlug(entry.id)}`}
+                label={entry.data.category}
+                meta={`${formatArticleDate(entry.data.published)} · ${getReadingTime(entry.body)} min read`}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {relatedInsights.length > 0 && (
+        <section class="mt-14">
+          <div class="max-w-3xl">
+            <p class="section-kicker">Related insights</p>
+            <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-900 md:text-3xl">
+              Shorter reading from the insights section
+            </h2>
+          </div>
+          <div class="article-grid mt-8">
+            {relatedInsights.map((entry) => (
+              <ArticleCard
+                title={entry.data.title}
+                summary={entry.data.summary}
+                href={`/insights/${getEntrySlug(entry.id)}`}
+                label={entry.data.category}
+                meta={`${formatArticleDate(entry.data.published)} · ${getReadingTime(entry.body)} min read`}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+    </>
+  ) : (
+    <section class="card mt-8">
+      <h1 class="text-3xl font-semibold tracking-tight text-slate-900">
+        Guide not found
+      </h1>
+      <p class="mt-4 text-slate-700">
+        The guide you were looking for is not available. You can return to the
+        guides page or contact Marie directly.
+      </p>
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a class="btn-primary" href="/guides">View guides</a>
+        <a class="btn-secondary" href="/contact">Contact Marie</a>
+      </div>
+    </section>
+  )}
+</Layout>

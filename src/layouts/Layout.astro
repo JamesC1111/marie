@@ -2,12 +2,14 @@
 import '../styles/global.css';
 
 import AnalyticsConsent from '../components/AnalyticsConsent.astro';
+import ChatAssistant from '../components/ChatAssistant.astro';
 import CTASection from '../components/CTASection.astro';
 import ContactBar from '../components/ContactBar.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import SpeculationRules from '../components/SpeculationRules.astro';
 import { getRequestHost, shouldNoIndexHost } from '../lib/request';
-import { defaultMeta, siteConfig } from '../lib/site';
+import { analyticsConfig, defaultMeta, siteConfig } from '../lib/site';
 
 interface Props {
   title?: string;
@@ -50,6 +52,9 @@ const shouldNoIndex = noIndex || shouldNoIndexHost(requestHost);
     <link rel="canonical" href={canonicalUrl} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
+    {analyticsConfig.enabled && analyticsConfig.scriptSrc && (
+      <link rel="preconnect" href={new URL(analyticsConfig.scriptSrc).origin} crossorigin />
+    )}
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content={pageTitle} />
@@ -67,6 +72,7 @@ const shouldNoIndex = noIndex || shouldNoIndexHost(requestHost);
     {schema.map((entry) => (
       <script is:inline type="application/ld+json" set:html={JSON.stringify(entry)} />
     ))}
+    <SpeculationRules />
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -80,6 +86,7 @@ const shouldNoIndex = noIndex || shouldNoIndexHost(requestHost);
       )}
     </main>
     <Footer />
+    <ChatAssistant />
     <ContactBar />
     <AnalyticsConsent />
   </body>

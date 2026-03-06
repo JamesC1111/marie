@@ -38,3 +38,35 @@ export async function sendContactEmail(
     text: lines.join("\n"),
   });
 }
+
+export type CallbackSubmission = {
+  name: string;
+  email: string;
+  phone: string;
+  preferredContact: string;
+  preferredTimes: string;
+};
+
+export async function sendCallbackEmail(
+  payload: CallbackSubmission,
+  delivery: SmtpDeliveryConfig,
+) {
+  const transport = nodemailer.createTransport(delivery.transport);
+  const lines = [
+    `New callback request for ${siteConfig.name}`,
+    "",
+    `Name: ${payload.name}`,
+    `Email: ${payload.email || "Not provided"}`,
+    `Phone: ${payload.phone || "Not provided"}`,
+    `Preferred contact method: ${payload.preferredContact}`,
+    `Preferred times: ${payload.preferredTimes || "Not specified"}`,
+  ];
+
+  await transport.sendMail({
+    to: delivery.to,
+    from: delivery.from,
+    replyTo: payload.email || undefined,
+    subject: `Callback request: ${payload.name}`,
+    text: lines.join("\n"),
+  });
+}

@@ -1,0 +1,245 @@
+---
+import { getContactDeliveryConfig } from "../lib/contact-delivery";
+import { getRequestHost } from "../lib/request";
+import { featureFlags, practiceContact } from "../lib/site";
+
+interface Props {
+  title?: string;
+  intro?: string;
+  returnPath?: string;
+}
+
+const {
+  title = "Leave your email or phone and Marie can get back to you",
+  intro = "You do not need to explain everything in your first message.",
+  returnPath = Astro.url.pathname,
+} = Astro.props;
+
+const requestHost = getRequestHost(Astro.request, Astro.url);
+const contactDelivery = getContactDeliveryConfig(requestHost);
+const formUnavailable = contactDelivery.mode === "unavailable";
+const callbackStatus = Astro.url.searchParams.get("callback");
+const callbackAlert =
+  callbackStatus === "success"
+    ? "Thank you. Your request has been sent. Marie will get back to you as soon as possible."
+    : callbackStatus === "validation"
+      ? "Please check the form and include your name plus an email address or phone number."
+      : callbackStatus === "rate-limit"
+        ? "There have been too many attempts in a short time. Please wait a little while, or contact Marie by phone or email."
+        : callbackStatus === "service-unavailable"
+          ? "The callback form is temporarily unavailable. Please call or email Marie directly."
+          : callbackStatus === "server"
+            ? "Sorry, your request could not be sent right now. Please try again or contact Marie directly."
+            : null;
+
+const isNewsletterMode = featureFlags.captureMode === "newsletter";
+const newsletterReady = Boolean(featureFlags.newsletterFormAction);
+---
+
+<section id="callback-capture" class="capture-shell section-shell px-6 py-7 md:px-8 md:py-8">
+  <div class="capture-copy">
+    <p class="section-kicker">
+      {isNewsletterMode ? "Email updates" : "A gentle first step"}
+    </p>
+    <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-900 md:text-3xl">
+      {title}
+    </h2>
+    <p class="mt-4 max-w-2xl text-slate-700">{intro}</p>
+    <p class="mt-2 text-slate-700">
+      Please do not include highly sensitive details in this form.
+    </p>
+    <p class="mt-1 text-sm text-slate-600">
+      {isNewsletterMode
+        ? "If you sign up for updates, your details go directly to the newsletter provider configured for the site."
+        : "Details from this form are sent to email for the purpose of getting back to you and are not stored in a website database."}
+    </p>
+  </div>
+
+  {callbackAlert && (
+    <section
+      class={`mt-6 rounded-[1.25rem] border px-4 py-3 text-sm ${
+        callbackStatus === "success"
+          ? "border-emerald-300 bg-emerald-50 text-emerald-900"
+          : "border-amber-300 bg-amber-50 text-amber-900"
+      }`}
+      aria-live={callbackStatus === "success" ? "polite" : "assertive"}
+      role={callbackStatus === "success" ? "status" : "alert"}
+    >
+      {callbackAlert}
+    </section>
+  )}
+
+  {isNewsletterMode ? (
+    newsletterReady ? (
+      <form
+        action={featureFlags.newsletterFormAction}
+        method="post"
+        class="form-grid mt-6"
+      >
+        <div>
+          <label for="newsletter-name">Name</label>
+          <input
+            id="newsletter-name"
+            name="name"
+            type="text"
+            autocomplete="name"
+            maxlength="80"
+          />
+        </div>
+
+        <div>
+          <label for="newsletter-email">Email</label>
+          <input
+            id="newsletter-email"
+            name="email"
+            type="email"
+            autocomplete="email"
+            required
+            maxlength="160"
+          />
+        </div>
+
+        <div class="rounded-[1rem] border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
+          <label class="inline-flex items-start gap-2" for="newsletter-consent">
+            <input
+              id="newsletter-consent"
+              name="consent"
+              type="checkbox"
+              required
+              class="mt-1 h-4 w-4"
+            />
+            <span>
+              I would like to receive occasional email updates and understand I
+              can unsubscribe at any time.
+            </span>
+          </label>
+        </div>
+
+        <button class="btn-primary w-fit" type="submit">
+          {featureFlags.newsletterButtonLabel}
+        </button>
+      </form>
+    ) : (
+      <div class="contact-note mt-6" role="alert">
+        <p class="font-medium text-amber-950">
+          Newsletter mode is enabled, but no newsletter form action has been configured.
+        </p>
+      </div>
+    )
+  ) : formUnavailable ? (
+    <div class="contact-note mt-6" role="alert">
+      <p class="font-medium text-amber-950">
+        The callback form is temporarily unavailable.
+      </p>
+      <p class="mt-2">
+        Please call or email Marie directly if you would like to ask about
+        availability.
+      </p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a class="btn-primary" href={`tel:${practiceContact.phoneHref}`}>
+          Call Marie
+        </a>
+        <a class="btn-secondary" href={`mailto:${practiceContact.email}`}>
+          Email Marie
+        </a>
+      </div>
+    </div>
+  ) : (
+    <form action="/api/callback" method="post" class="form-grid mt-6" novalidate>
+      <input type="hidden" name="returnPath" value={returnPath} />
+
+      <div>
+        <label for="callback-name">Name</label>
+        <input
+          id="callback-name"
+          name="name"
+          type="text"
+          autocomplete="name"
+          required
+          maxlength="80"
+        />
+      </div>
+
+      <div class="grid gap-4 md:grid-cols-2">
+        <div>
+          <label for="callback-email">Email</label>
+          <input
+            id="callback-email"
+            name="email"
+            type="email"
+            autocomplete="email"
+            maxlength="160"
+          />
+        </div>
+        <div>
+          <label for="callback-phone">Phone</label>
+          <input
+            id="callback-phone"
+            name="phone"
+            type="tel"
+            inputmode="tel"
+            autocomplete="tel"
+            maxlength="40"
+          />
+        </div>
+      </div>
+
+      <div class="grid gap-4 md:grid-cols-2">
+        <div>
+          <label for="callback-preferredContact">Preferred contact method</label>
+          <select
+            id="callback-preferredContact"
+            name="preferredContact"
+            required
+          >
+            <option value="">Select one</option>
+            <option value="Phone">Phone</option>
+            <option value="Email">Email</option>
+            <option value="Either">Either</option>
+          </select>
+        </div>
+        <div>
+          <label for="callback-preferredTimes">Preferred contact time</label>
+          <input
+            id="callback-preferredTimes"
+            name="preferredTimes"
+            type="text"
+            maxlength="120"
+            placeholder="Example: weekday mornings"
+          />
+        </div>
+      </div>
+
+      <div
+        style="position:absolute;left:-9999px;opacity:0;pointer-events:none;"
+        aria-hidden="true"
+      >
+        <label for="callback-company">Company</label>
+        <input
+          id="callback-company"
+          name="company"
+          tabindex="-1"
+          autocomplete="off"
+        />
+      </div>
+
+      <div class="rounded-[1rem] border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
+        <label class="inline-flex items-start gap-2" for="callback-consent">
+          <input
+            id="callback-consent"
+            name="consent"
+            type="checkbox"
+            required
+            class="mt-1 h-4 w-4"
+          />
+          <span>
+            I consent to being contacted by Marie Harding Counselling Service
+            regarding this request.
+          </span>
+        </label>
+      </div>
+
+      <button class="btn-primary w-fit" type="submit">Send callback request</button>
+    </form>
+  )}
+</section>

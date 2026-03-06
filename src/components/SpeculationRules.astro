@@ -1,0 +1,33 @@
+---
+import { isCanonicalHost } from "../lib/request";
+import { featureFlags } from "../lib/site";
+
+const requestHost = Astro.request.headers.get("x-forwarded-host")
+  ?? Astro.request.headers.get("host")
+  ?? Astro.url.hostname;
+
+const shouldRender =
+  featureFlags.speculationRulesEnabled && isCanonicalHost(requestHost);
+
+const rules = {
+  prefetch: [
+    {
+      source: "document",
+      where: {
+        selector_matches: "a[data-speculate='intent']",
+      },
+      eagerness: "moderate",
+    },
+  ],
+};
+---
+
+{
+  shouldRender && (
+    <script
+      is:inline
+      type="speculationrules"
+      set:html={JSON.stringify(rules)}
+    />
+  )
+}

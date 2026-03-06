@@ -13,6 +13,8 @@ export const siteConfig = {
   ],
 } as const;
 
+const publicEnv = import.meta.env ?? {};
+
 export const practiceContact = {
   phoneDisplay: "087 250 3743",
   phoneHref: "+353872503743",
@@ -107,14 +109,29 @@ export const ctaLinks = {
   request: "/contact#appointment-form",
 } as const;
 
-const analyticsEnv = import.meta.env ?? {};
+export const practiceAuthor = {
+  name: "Marie Harding Counselling Service",
+  location: practiceContact.addressLine2,
+  role: "Counselling practice",
+} as const;
+
+export const featureFlags = {
+  chatAssistantEnabled: publicEnv.PUBLIC_CHAT_ASSISTANT_ENABLED !== "false",
+  captureMode:
+    publicEnv.PUBLIC_CAPTURE_MODE === "newsletter" ? "newsletter" : "callback",
+  newsletterFormAction: publicEnv.PUBLIC_NEWSLETTER_FORM_ACTION ?? "",
+  newsletterButtonLabel:
+    publicEnv.PUBLIC_NEWSLETTER_BUTTON_LABEL ?? "Join updates",
+  speculationRulesEnabled:
+    publicEnv.PUBLIC_SPECULATION_RULES_ENABLED === "true",
+} as const;
 
 export const analyticsConfig = {
-  enabled: analyticsEnv.PUBLIC_ANALYTICS_ENABLED === "true",
+  enabled: publicEnv.PUBLIC_ANALYTICS_ENABLED === "true",
   scriptSrc:
-    analyticsEnv.PUBLIC_ANALYTICS_SCRIPT_SRC ??
+    publicEnv.PUBLIC_ANALYTICS_SCRIPT_SRC ??
     "https://plausible.io/js/script.js",
-  domain: analyticsEnv.PUBLIC_ANALYTICS_DOMAIN ?? "",
+  domain: publicEnv.PUBLIC_ANALYTICS_DOMAIN ?? "",
 };
 
 export const defaultMeta = {

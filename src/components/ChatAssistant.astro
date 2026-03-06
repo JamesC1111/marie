@@ -1,0 +1,218 @@
+---
+import { chatIntents, urgentChatPattern } from "../lib/chat-assistant";
+import { featureFlags } from "../lib/site";
+
+const urgentPatternSource = urgentChatPattern.source;
+---
+
+{
+  featureFlags.chatAssistantEnabled && (
+    <div class="chat-launcher" data-chat-assistant>
+      <button
+        type="button"
+        class="chat-launcher__button"
+        data-chat-open
+        aria-expanded="false"
+        aria-controls="chat-assistant-panel"
+      >
+        Chat
+      </button>
+
+      <section
+        id="chat-assistant-panel"
+        class="chat-panel"
+        hidden
+        aria-label="Practical website chat assistant"
+      >
+        <div class="chat-panel__header">
+          <div>
+            <p class="section-kicker">Practical questions</p>
+            <h2 class="mt-2 text-lg font-semibold text-slate-950">
+              Hello, I can help with practical questions about appointments,
+              location, and how to get started.
+            </h2>
+          </div>
+          <button
+            type="button"
+            class="chat-panel__close"
+            data-chat-close
+            aria-label="Close chat assistant"
+          >
+            Close
+          </button>
+        </div>
+
+        <p class="chat-panel__warning">
+          Please do not share highly sensitive personal or medical details in
+          chat.
+        </p>
+
+        <div class="chat-chip-list" aria-label="Suggested questions">
+          {chatIntents.slice(0, 6).map((intent) => (
+            <button
+              type="button"
+              class="chat-chip"
+              data-chat-suggestion={intent.keywords[0]}
+            >
+              {intent.label}
+            </button>
+          ))}
+        </div>
+
+        <div class="chat-log" data-chat-log aria-live="polite">
+          <article class="chat-bubble chat-bubble--assistant">
+            <p>
+              Ask about appointments, contact options, location, online or
+              in-person sessions, first-session expectations, confidentiality,
+              or urgent-help guidance.
+            </p>
+          </article>
+        </div>
+
+        <form class="chat-form" data-chat-form>
+          <label class="sr-only" for="chat-message">
+            Ask a practical question
+          </label>
+          <input
+            id="chat-message"
+            name="message"
+            type="text"
+            maxlength="220"
+            placeholder="Ask a practical question"
+            autocomplete="off"
+          />
+          <button type="submit" class="btn-primary">Send</button>
+        </form>
+      </section>
+
+      <script
+        is:inline
+        define:vars={{ intents: chatIntents, urgentPatternSource }}
+      >
+        const root = document.querySelector("[data-chat-assistant]");
+        if (!root) return;
+
+        const panel = root.querySelector("[id='chat-assistant-panel']");
+        const openButton = root.querySelector("[data-chat-open]");
+        const closeButton = root.querySelector("[data-chat-close]");
+        const form = root.querySelector("[data-chat-form]");
+        const input = form?.querySelector("input");
+        const log = root.querySelector("[data-chat-log]");
+        const suggestionButtons = root.querySelectorAll("[data-chat-suggestion]");
+        const urgentPattern = new RegExp(urgentPatternSource, "i");
+
+        const appendMessage = (text, kind = "assistant", links = []) => {
+          if (!log) return;
+          const article = document.createElement("article");
+          article.className = `chat-bubble chat-bubble--${kind}`;
+          const paragraph = document.createElement("p");
+          paragraph.textContent = text;
+          article.appendChild(paragraph);
+
+          if (links.length > 0) {
+            const actions = document.createElement("div");
+            actions.className = "chat-bubble__links";
+            for (const link of links) {
+              const anchor = document.createElement("a");
+              anchor.href = link.href;
+              anchor.textContent = link.label;
+              anchor.className = "link-subtle";
+              actions.appendChild(anchor);
+            }
+            article.appendChild(actions);
+          }
+
+          log.appendChild(article);
+          log.scrollTop = log.scrollHeight;
+        };
+
+        const getReply = (message) => {
+          const text = message.trim().toLowerCase();
+          if (!text) {
+            return {
+              message:
+                "You can ask about appointments, contact options, location, online or in-person sessions, confidentiality, or what the first session is like.",
+            };
+          }
+
+          if (urgentPattern.test(text)) {
+            return {
+              message:
+                "I cannot help with urgent or crisis situations. Please call 112 or 999 now if there is immediate danger. You can also call Samaritans on 116 123 or Pieta on 1800 247 247, or text HELP to 51444.",
+              links: [
+                { label: "Call 112", href: "tel:112" },
+                { label: "Support resources", href: "/resources" },
+              ],
+            };
+          }
+
+          const match = intents.find((intent) =>
+            intent.keywords.some((keyword) => text.includes(keyword)),
+          );
+
+          if (match) {
+            return {
+              message: match.response,
+              links: match.links || [],
+            };
+          }
+
+          return {
+            message:
+              "I can help with practical questions about appointments, location, how to get started, online or in-person sessions, confidentiality, and urgent-help guidance. For anything else, it is best to contact Marie directly.",
+            links: [
+              { label: "Contact Marie", href: "/contact" },
+              { label: "How counselling works", href: "/how-counselling-works" },
+            ],
+          };
+        };
+
+        const openPanel = () => {
+          if (!panel || !openButton) return;
+          panel.hidden = false;
+          openButton.setAttribute("aria-expanded", "true");
+          input?.focus();
+        };
+
+        const closePanel = () => {
+          if (!panel || !openButton) return;
+          panel.hidden = true;
+          openButton.setAttribute("aria-expanded", "false");
+          openButton.focus();
+        };
+
+        openButton?.addEventListener("click", () => {
+          if (panel?.hidden) {
+            openPanel();
+          } else {
+            closePanel();
+          }
+        });
+
+        closeButton?.addEventListener("click", closePanel);
+
+        suggestionButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            const keyword = button.dataset.chatSuggestion || "";
+            openPanel();
+            appendMessage(button.textContent || keyword, "user");
+            const reply = getReply(keyword);
+            appendMessage(reply.message, "assistant", reply.links || []);
+          });
+        });
+
+        form?.addEventListener("submit", (event) => {
+          event.preventDefault();
+          if (!(input instanceof HTMLInputElement)) return;
+          const message = input.value.trim();
+          if (!message) return;
+          openPanel();
+          appendMessage(message, "user");
+          const reply = getReply(message);
+          appendMessage(reply.message, "assistant", reply.links || []);
+          input.value = "";
+        });
+      </script>
+    </div>
+  )
+}

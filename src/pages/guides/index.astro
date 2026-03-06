@@ -1,0 +1,73 @@
+---
+import { getCollection } from "astro:content";
+
+import ArticleCard from "../../components/ArticleCard.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import PageHeader from "../../components/PageHeader.astro";
+import Layout from "../../layouts/Layout.astro";
+import {
+  formatArticleDate,
+  getReadingTime,
+  sortByPublishedDesc,
+} from "../../lib/articles";
+import { getEntrySlug } from "../../lib/content";
+
+const guides = sortByPublishedDesc(await getCollection("guides"));
+const featuredGuides = guides.filter((guide) => guide.data.featured).slice(0, 3);
+---
+
+<Layout
+  title="Guides and practical information | Marie Harding"
+  description="Helpful counselling guides on first sessions, confidentiality, bereavement, anxiety, and getting started in Ireland."
+  canonicalPath="/guides"
+>
+  <div class="space-y-6">
+    <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Guides" }]} />
+    <PageHeader
+      title="Guides and practical information"
+      intro="Original, practical reading for people who want a clearer picture before making contact or beginning counselling."
+    />
+  </div>
+
+  {featuredGuides.length > 0 && (
+    <section class="section-shell mt-8 px-6 py-8 md:px-8 md:py-10">
+      <div class="max-w-3xl">
+        <p class="section-kicker">Start here</p>
+        <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-900 md:text-3xl">
+          Featured guides
+        </h2>
+      </div>
+      <div class="article-grid mt-8">
+        {featuredGuides.map((guide) => (
+          <ArticleCard
+            title={guide.data.title}
+            summary={guide.data.summary}
+            href={`/guides/${getEntrySlug(guide.id)}`}
+            label={guide.data.category}
+            meta={`${formatArticleDate(guide.data.published)} · ${getReadingTime(guide.body)} min read`}
+          />
+        ))}
+      </div>
+    </section>
+  )}
+
+  <section class="mt-14">
+    <div class="max-w-3xl">
+      <p class="section-kicker">All guides</p>
+      <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-900 md:text-3xl">
+        Browse the full guide library
+      </h2>
+    </div>
+    <div class="article-grid mt-8">
+      {guides.map((guide) => (
+        <ArticleCard
+          title={guide.data.title}
+          summary={guide.data.summary}
+          href={`/guides/${getEntrySlug(guide.id)}`}
+          label={guide.data.category}
+          meta={`${formatArticleDate(guide.data.published)} · ${getReadingTime(guide.body)} min read`}
+        />
+      ))}
+    </div>
+  </section>
+</Layout>

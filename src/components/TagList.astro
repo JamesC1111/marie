@@ -1,0 +1,17 @@
+---
+import { getTagSlug } from "../lib/articles";
+
+interface Props {
+  tags: string[];
+}
+
+const { tags } = Astro.props;
+---
+
+<ul class="tag-list" aria-label="Article tags">
+  {tags.map((tag) => (
+    <li>
+      <a href={`/insights/tags/${getTagSlug(tag)}`}>{tag}</a>
+    </li>
+  ))}
+</ul>
